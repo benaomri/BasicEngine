@@ -14,5 +14,6 @@ public:
 	void WhenTranslate();
 	void Motion();
 	~Game(void);
+    unsigned char*  SobelOperator(int width, int height, unsigned char* image);
 };
 
