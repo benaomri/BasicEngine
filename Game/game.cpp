@@ -1,4 +1,5 @@
 #include "game.h"
+#include "stb_image.h"
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -22,12 +23,13 @@ Game::Game(float angle ,float relationWH, float near1, float far1) : Scene(angle
 }
 
 void Game::Init()
-{		
-
-	AddShader("../res/shaders/pickingShader");	
+{
+    int w, h, c;
+	AddShader("../res/shaders/pickingShader");
 	AddShader("../res/shaders/basicShader");
-	
-	AddTexture("../res/textures/box0.bmp",false);
+    unsigned char *data = stbi_load("../res/textures/lena256.jpg", &w, &h, &c, 4);
+
+    AddTexture(256,256,data);
 
 	AddShape(Plane,-1,TRIANGLES);
 	
