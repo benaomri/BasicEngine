@@ -3,6 +3,7 @@
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 using namespace std;
+
 static void printMat(const glm::mat4 mat)
 {
 	std::cout<<" matrix:"<<std::endl;
@@ -24,13 +25,15 @@ Game::Game(float angle ,float relationWH, float near1, float far1) : Scene(angle
 
 void Game::Init()
 {
-    int width, height, c;
+    int w, h, c;
 	AddShader("../res/shaders/pickingShader");
 	AddShader("../res/shaders/basicShader");
-    unsigned char *image_data = stbi_load("../res/textures/lena256.jpg", &width, &height, &c, 4);
-    vector<vector<unsigned char>> *asOneDemension= oneDemension(width,height,image_data);
-    unsigned char *gray = toData(asOneDemension,image_data);
-    AddTexture(256, 256,gray);
+    unsigned char *data = stbi_load("../res/textures/lena256.jpg", &w, &h, &c, 4);
+
+
+
+    AddTexture(256,256,SobelOperator(w,h,data));
+
 	AddShape(Plane,-1,TRIANGLES);
 	
 	pickedShape = 0;
@@ -67,6 +70,59 @@ void Game::WhenTranslate()
 {
 }
 
+unsigned char* Game::SobelOperator(int width, int height, unsigned char* image)
+{
+    int pixel_x;
+    int pixel_y;
+    int sobel_x[3][3] =
+            { { -1, 0, 1 },
+              { -2, 0, 2 },
+              { -1, 0, 1 } };
+
+    int sobel_y[3][3] =
+            { { -1, -2, -1 },
+              { 0,  0,  0 },
+              { 1,  2,  1 } };
+
+    for (int x=1; x < (width-1)*4; x++)
+    {
+        for (int y=1; y < (height-1)*4; y+=3)
+        {
+
+            pixel_x = (sobel_x[0][0] * image[width * (y-1) + (x-1)])
+                      + (sobel_x[0][1] * image[width * (y-1) +  x   ])
+                      + (sobel_x[0][2] * image[width * (y-1) + (x+1)])
+                      + (sobel_x[1][0] * image[width *  y    + (x-1)])
+                      + (sobel_x[1][1] * image[width *  y    +  x   ])
+                      + (sobel_x[1][2] * image[width *  y    + (x+1)])
+                      + (sobel_x[2][0] * image[width * (y+1) + (x-1)])
+                      + (sobel_x[2][1] * image[width * (y+1) +  x   ])
+                      + (sobel_x[2][2] * image[width * (y+1) + (x+1)]);
+
+            pixel_y = (sobel_y[0][0] * image[width * (y-1) + (x-1)])
+                      + (sobel_y[0][1] * image[width * (y-1) +  x   ])
+                      + (sobel_y[0][2] * image[width * (y-1) + (x+1)])
+                      + (sobel_y[1][0] * image[width *  y    + (x-1)])
+                      + (sobel_y[1][1] * image[width *  y    +  x   ])
+                      + (sobel_y[1][2] * image[width *  y    + (x+1)])
+                      + (sobel_y[2][0] * image[width * (y+1) + (x-1)])
+                      + (sobel_y[2][1] * image[width * (y+1) +  x   ])
+                      + (sobel_y[2][2] * image[width * (y+1) + (x+1)]);
+
+            int val = (int)sqrt((pixel_x * pixel_x) + (pixel_y * pixel_y));
+
+            if(val < 0) val = 0;
+            if(val > 255) val = 255;
+
+            image[height * y + x] = val;
+            image[height * y + x+1] = val;
+            image[height * y + x+2] = val;
+        }
+    }
+
+    return image;
+}
+
 void Game::Motion()
 {
 	if(isActive)
@@ -74,61 +130,6 @@ void Game::Motion()
 	}
 }
 
-
-vector<vector<unsigned char>>* Game::oneDemension(int width,int height,unsigned char *image_data) {
-    vector<vector<unsigned char>>* asOneDemension= new vector<vector<unsigned char >>();
-    for(int x=0;x<width;x++) {
-        vector<unsigned char> current_row;
-        for (int y = 0; y < height; y++) {
-            unsigned char avg = (image_data[4*(x*width+y)]+image_data[4*(x*width+y)+1]+image_data[4*(x*width+y)+2])/3;
-            current_row.push_back(avg);
-        }
-        asOneDemension->push_back(current_row);
-    }
-    return asOneDemension;
-}
-
-void Game::grayScale(int width,int height,unsigned char* image_data){
-    for(int i=0 ;i < 256*256*4 ;i=i+3){
-        unsigned char avg = (image_data[i]+image_data[i+1]+image_data[i+2])/3;
-        image_data[i]=image_data[i+1]=image_data[i+2]=avg;
-    }
-}
-
-void Game::halfTone(int width,int height,unsigned char *image_data) {
-//    double a=7/16;
-//    double b=3/16;
-//    double g=5/16;
-//    double d = 1/16;
-//    double e;
-//
-//    for (int i = 0; i < width*height*4; i=i+4) {
-//            P(x,y) = trunc(I(x,y) + 0.5)
-//            e = I(x,y) - P(x,y);
-//            I(x,y+1) += a*e;
-//            I(x+1,y-1) += b*e;
-//            I(x+1,y) += g*e;
-//            I(x+1,y+1) += d *e;
-//        }
-//    }
-
-}
-
 Game::~Game(void)
 {
-}
-
-unsigned char *Game::toData(std::vector<std::vector<unsigned char>> *oneDemension,unsigned char *originData) {
-    for(int i=0;i<oneDemension->size();i++){
-        vector<unsigned char> current_row = oneDemension->at(i);
-        for(int j=0;j<current_row.size();j++)
-        {
-            originData[4*(i*current_row.size()+j)]=current_row.at(j);
-            originData[4*(i*current_row.size()+j)+1]=current_row.at(j);
-            originData[4*(i*current_row.size()+j)+2]=current_row.at(j);
-
-        }
-    }
-
-    return originData;
 }
