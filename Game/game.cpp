@@ -28,7 +28,7 @@ void Game::Init()
 	AddShader("../res/shaders/pickingShader");
 	AddShader("../res/shaders/basicShader");
     unsigned char *image_data = stbi_load("../res/textures/lena256.jpg", &width, &height, &c, 4);
-    vector<vector<unsigned char>> *asOneDemension= oneDemension(width,height,image_data);
+    vector<vector<unsigned char>> *asOneDemension= oneDemensionAndGray(width, height, image_data);
     unsigned char *gray = toData(asOneDemension,image_data);
     AddTexture(256, 256,gray);
 	AddShape(Plane,-1,TRIANGLES);
@@ -75,7 +75,7 @@ void Game::Motion()
 }
 
 
-vector<vector<unsigned char>>* Game::oneDemension(int width,int height,unsigned char *image_data) {
+vector<vector<unsigned char>>* Game::oneDemensionAndGray(int width, int height, unsigned char *image_data) {
     vector<vector<unsigned char>>* asOneDemension= new vector<vector<unsigned char >>();
     for(int x=0;x<width;x++) {
         vector<unsigned char> current_row;
@@ -88,12 +88,6 @@ vector<vector<unsigned char>>* Game::oneDemension(int width,int height,unsigned 
     return asOneDemension;
 }
 
-void Game::grayScale(int width,int height,unsigned char* image_data){
-    for(int i=0 ;i < 256*256*4 ;i=i+3){
-        unsigned char avg = (image_data[i]+image_data[i+1]+image_data[i+2])/3;
-        image_data[i]=image_data[i+1]=image_data[i+2]=avg;
-    }
-}
 
 void Game::halfTone(int width,int height,unsigned char *image_data) {
 //    double a=7/16;
@@ -118,9 +112,9 @@ Game::~Game(void)
 {
 }
 
-unsigned char *Game::toData(std::vector<std::vector<unsigned char>> *oneDemension,unsigned char *originData) {
-    for(int i=0;i<oneDemension->size();i++){
-        vector<unsigned char> current_row = oneDemension->at(i);
+unsigned char *Game::toData(std::vector<std::vector<unsigned char>> *oneDemensionAndGray, unsigned char *originData) {
+    for(int i=0; i < oneDemensionAndGray->size(); i++){
+        vector<unsigned char> current_row = oneDemensionAndGray->at(i);
         for(int j=0;j<current_row.size();j++)
         {
             originData[4*(i*current_row.size()+j)]=current_row.at(j);

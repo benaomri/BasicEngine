@@ -23,10 +23,9 @@ public:
 
     ~Game(void);
 
-    void grayScale(int width, int height, unsigned char *image_data);
     void halfTone(int width, int height, unsigned char *image_data);
-    unsigned char * toData(std::vector<std::vector<unsigned char>> *oneDemension,unsigned char *originData);
-    std::vector <std::vector<unsigned char>> *oneDemension(int width, int height, unsigned char *image_data);
+    unsigned char * toData(std::vector<std::vector<unsigned char>> *oneDemensionAndGray, unsigned char *originData);
+    std::vector <std::vector<unsigned char>> *oneDemensionAndGray(int width, int height, unsigned char *image_data);
 
 };
 
