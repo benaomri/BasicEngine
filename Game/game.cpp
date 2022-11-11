@@ -28,9 +28,10 @@ void Game::Init()
 	AddShader("../res/shaders/pickingShader");
 	AddShader("../res/shaders/basicShader");
     unsigned char *image_data = stbi_load("../res/textures/lena256.jpg", &width, &height, &c, 4);
-    vector<vector<unsigned char>> *asOneDemension= oneDemensionAndGray(width, height, image_data);
-    unsigned char *gray = toData(asOneDemension,image_data);
-    AddTexture(256, 256,gray);
+//    vector<vector<unsigned char>> *asOneDemension= oneDemensionAndGray(width, height, image_data);
+    unsigned char * ht = halfTone(image_data,width,height);
+//    unsigned char *gray = toData(asOneDemension,image_data);
+    AddTexture(width*2, height*2,ht);
 	AddShape(Plane,-1,TRIANGLES);
 	
 	pickedShape = 0;
@@ -89,23 +90,48 @@ vector<vector<unsigned char>>* Game::oneDemensionAndGray(int width, int height, 
 }
 
 
-void Game::halfTone(int width,int height,unsigned char *image_data) {
-//    double a=7/16;
-//    double b=3/16;
-//    double g=5/16;
-//    double d = 1/16;
-//    double e;
-//
-//    for (int i = 0; i < width*height*4; i=i+4) {
-//            P(x,y) = trunc(I(x,y) + 0.5)
-//            e = I(x,y) - P(x,y);
-//            I(x,y+1) += a*e;
-//            I(x+1,y-1) += b*e;
-//            I(x+1,y) += g*e;
-//            I(x+1,y+1) += d *e;
-//        }
-//    }
-
+unsigned char* Game::halfTone(unsigned char* image_data, int width, int height) {
+    vector<vector<unsigned char>>* grey_scale_matrix = oneDemensionAndGray(width,height,image_data);
+    vector<vector<unsigned char>>* newMat = new vector<vector<unsigned char>>();
+    for (int i = 0; i < height; i++) {
+        vector<unsigned char> inner1;
+        vector<unsigned char> inner2;
+        for (int j = 0; j < width; j++) {
+            if ((*grey_scale_matrix)[i][j] <= 50) {
+                inner1.push_back(0);
+                inner1.push_back(0);
+                inner2.push_back(0);
+                inner2.push_back(0);
+            }
+            else if ((*grey_scale_matrix)[i][j] <= 101) {
+                inner1.push_back(0);
+                inner1.push_back(0);
+                inner2.push_back(255);
+                inner2.push_back(0);
+            }
+            else if ((*grey_scale_matrix)[i][j] <= 152) {
+                inner1.push_back(0);
+                inner1.push_back(255);
+                inner2.push_back(255);
+                inner2.push_back(0);
+            }
+            else if ((*grey_scale_matrix)[i][j] <= 203) {
+                inner1.push_back(0);
+                inner1.push_back(255);
+                inner2.push_back(255);
+                inner2.push_back(255);
+            }
+            else {
+                inner1.push_back(255);
+                inner1.push_back(255);
+                inner2.push_back(255);
+                inner2.push_back(255);
+            }
+        }
+        newMat->push_back(inner1);
+        newMat->push_back(inner2);
+    }
+    return toData(newMat,image_data);
 }
 
 Game::~Game(void)
