@@ -1,11 +1,7 @@
 #include "game.h"
-#include "CannySobel.h"
 #include "stb_image.h"
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
-#include <fstream>
-
-using namespace std;
 
 static void printMat(const glm::mat4 mat)
 {
@@ -33,10 +29,7 @@ void Game::Init()
 	AddShader("../res/shaders/basicShader");
     unsigned char *data = stbi_load("../res/textures/lena256.jpg", &w, &h, &c, 4);
 
-    vector<vector<unsigned char>>* greyScaleData = oneDemensionAndGray(w,h,data);
-    CannySobel *cannySobel = new CannySobel();
-
-    AddTexture(256,256, cannySobel->Canny_Edge_Detector(greyScaleData,w,h));
+    AddTexture(256,256,data);
 
 	AddShape(Plane,-1,TRIANGLES);
 	
@@ -72,19 +65,6 @@ void Game::WhenRotate()
 
 void Game::WhenTranslate()
 {
-}
-
-vector<vector<unsigned char>>* Game::oneDemensionAndGray(int width, int height, unsigned char *image_data) {
-    vector<vector<unsigned char>>* asOneDemension= new vector<vector<unsigned char >>();
-    for(int x=0;x<width;x++) {
-        vector<unsigned char> current_row;
-        for (int y = 0; y < height; y++) {
-            unsigned char avg = (image_data[4*(x*width+y)]+image_data[4*(x*width+y)+1]+image_data[4*(x*width+y)+2])/3;
-            current_row.push_back(avg);
-        }
-        asOneDemension->push_back(current_row);
-    }
-    return asOneDemension;
 }
 
 void Game::Motion()
