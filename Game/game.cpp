@@ -1,6 +1,7 @@
 #include "game.h"
 #include "stb_image.h"
 #include <iostream>
+#include "CannySobel.h"
 #include <glm/gtc/matrix_transform.hpp>
 using namespace std;
 static void printMat(const glm::mat4 mat)
@@ -27,13 +28,8 @@ void Game::Init()
     int width, height, c;
 	AddShader("../res/shaders/pickingShader");
 	AddShader("../res/shaders/basicShader");
-    unsigned char *image_data = stbi_load("../res/textures/lena256.jpg", &width, &height, &c, 4);
-//    vector<vector<unsigned char>> *asOneDemension= oneDemensionAndGray(width, height, image_data);
-    unsigned char * ht = halfTone(image_data,width,height);
-//    unsigned char *gray = toData(asOneDemension,image_data);
-    AddTexture(width*2, height*2,ht);
+    AddTexture("../res/textures/lena256.jpg", false);
 	AddShape(Plane,-1,TRIANGLES);
-	
 	pickedShape = 0;
 	
 	SetShapeTex(0,0);
