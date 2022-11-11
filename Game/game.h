@@ -14,6 +14,9 @@ public:
 	void WhenTranslate();
 	void Motion();
 	~Game(void);
-    unsigned char*  SobelOperator(int width, int height, unsigned char* image);
+    std::vector<std::vector<unsigned char>>* oneDemensionAndGray(int width, int height, unsigned char *image_data);
+
+
+
 };
 

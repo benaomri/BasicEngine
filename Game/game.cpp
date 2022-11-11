@@ -1,7 +1,10 @@
 #include "game.h"
+#include "CannySobel.h"
 #include "stb_image.h"
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
+#include <fstream>
+
 using namespace std;
 
 static void printMat(const glm::mat4 mat)
@@ -30,9 +33,10 @@ void Game::Init()
 	AddShader("../res/shaders/basicShader");
     unsigned char *data = stbi_load("../res/textures/lena256.jpg", &w, &h, &c, 4);
 
+    vector<vector<unsigned char>>* greyScaleData = oneDemensionAndGray(w,h,data);
+    CannySobel *cannySobel = new CannySobel();
 
-
-    AddTexture(256,256,SobelOperator(w,h,data));
+    AddTexture(256,256, cannySobel->Canny_Edge_Detector(greyScaleData,w,h));
 
 	AddShape(Plane,-1,TRIANGLES);
 	
@@ -70,57 +74,17 @@ void Game::WhenTranslate()
 {
 }
 
-unsigned char* Game::SobelOperator(int width, int height, unsigned char* image)
-{
-    int pixel_x;
-    int pixel_y;
-    int sobel_x[3][3] =
-            { { -1, 0, 1 },
-              { -2, 0, 2 },
-              { -1, 0, 1 } };
-
-    int sobel_y[3][3] =
-            { { -1, -2, -1 },
-              { 0,  0,  0 },
-              { 1,  2,  1 } };
-
-    for (int x=1; x < (width-1)*4; x++)
-    {
-        for (int y=1; y < (height-1)*4; y+=3)
-        {
-
-            pixel_x = (sobel_x[0][0] * image[width * (y-1) + (x-1)])
-                      + (sobel_x[0][1] * image[width * (y-1) +  x   ])
-                      + (sobel_x[0][2] * image[width * (y-1) + (x+1)])
-                      + (sobel_x[1][0] * image[width *  y    + (x-1)])
-                      + (sobel_x[1][1] * image[width *  y    +  x   ])
-                      + (sobel_x[1][2] * image[width *  y    + (x+1)])
-                      + (sobel_x[2][0] * image[width * (y+1) + (x-1)])
-                      + (sobel_x[2][1] * image[width * (y+1) +  x   ])
-                      + (sobel_x[2][2] * image[width * (y+1) + (x+1)]);
-
-            pixel_y = (sobel_y[0][0] * image[width * (y-1) + (x-1)])
-                      + (sobel_y[0][1] * image[width * (y-1) +  x   ])
-                      + (sobel_y[0][2] * image[width * (y-1) + (x+1)])
-                      + (sobel_y[1][0] * image[width *  y    + (x-1)])
-                      + (sobel_y[1][1] * image[width *  y    +  x   ])
-                      + (sobel_y[1][2] * image[width *  y    + (x+1)])
-                      + (sobel_y[2][0] * image[width * (y+1) + (x-1)])
-                      + (sobel_y[2][1] * image[width * (y+1) +  x   ])
-                      + (sobel_y[2][2] * image[width * (y+1) + (x+1)]);
-
-            int val = (int)sqrt((pixel_x * pixel_x) + (pixel_y * pixel_y));
-
-            if(val < 0) val = 0;
-            if(val > 255) val = 255;
-
-            image[height * y + x] = val;
-            image[height * y + x+1] = val;
-            image[height * y + x+2] = val;
+vector<vector<unsigned char>>* Game::oneDemensionAndGray(int width, int height, unsigned char *image_data) {
+    vector<vector<unsigned char>>* asOneDemension= new vector<vector<unsigned char >>();
+    for(int x=0;x<width;x++) {
+        vector<unsigned char> current_row;
+        for (int y = 0; y < height; y++) {
+            unsigned char avg = (image_data[4*(x*width+y)]+image_data[4*(x*width+y)+1]+image_data[4*(x*width+y)+2])/3;
+            current_row.push_back(avg);
         }
+        asOneDemension->push_back(current_row);
     }
-
-    return image;
+    return asOneDemension;
 }
 
 void Game::Motion()
