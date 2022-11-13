@@ -1,13 +1,3 @@
-//
-// Created by noamm on 11/11/2022.
-//
-//
-//#ifndef GAME_CANNYSOBEL_H
-//#define GAME_CANNYSOBEL_H
-//
-//#endif //GAME_CANNYSOBEL_H
-
-
 #pragma once
 #include "scene.h"
 
@@ -15,7 +5,7 @@ class CannySobel
 {
 public:
 
-    unsigned char* edgeDetector(std::vector<std::vector<unsigned char>>* data, int width, int height);
+    unsigned char* edgeDetector(int width, int height, std::vector<std::vector<unsigned char>>* data);
     std::vector<std::vector<int>>* gaussianKernel(int* div);
     std::vector<std::vector<unsigned char>>* threshold(std::vector<std::vector<unsigned char>>* nms, int width, int height);
     void writeToFile(const std::string& fileName, std::vector<std::vector<unsigned char>>* matrix, int width, int height, int div);

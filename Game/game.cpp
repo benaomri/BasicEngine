@@ -20,7 +20,7 @@ Game::Game() : Scene()
 }
 
 Game::Game(float angle ,float relationWH, float near1, float far1) : Scene(angle,relationWH,near1,far1)
-{ 	
+{
 }
 
 void Game::Init()
@@ -30,19 +30,19 @@ void Game::Init()
 	AddShader("../res/shaders/basicShader");
     unsigned char *image_data = stbi_load("../res/textures/lena256.jpg", &width, &height, &c, 4);
     vector<vector<unsigned char>> *asOneDemension= oneDemensionAndGray(width, height, image_data);
+    AddTexture(width, height, FloydSteinbergAlgorithm(image_data));
 //    unsigned char * ht = halfTone(image_data,width,height);
 //    unsigned char *gray = toData(asOneDemension,image_data);
-    CannySobel *cannySobel = new CannySobel();
-
-    AddTexture(width, height, cannySobel->edgeDetector(asOneDemension, width, height));
+//    CannySobel *cannySobel = new CannySobel();
+//    AddTexture(width, height, cannySobel->edgeDetector(width, height, asOneDemension));
 	AddShape(Plane,-1,TRIANGLES);
-	
+
 	pickedShape = 0;
-	
+
 	SetShapeTex(0,0);
 	MoveCamera(0,zTranslate,10);
 	pickedShape = -1;
-	
+
 	//ReadPixel(); //uncomment when you are reading from the z-buffer
 }
 
@@ -58,9 +58,37 @@ void Game::Update(const glm::mat4 &MVP,const glm::mat4 &Model,const int  shaderI
 	s->SetUniform4f("lightDirection", 0.0f , 0.0f, -1.0f, 0.0f);
 	if(shaderIndx == 0)
 		s->SetUniform4f("lightColor",r/255.0f, g/255.0f, b/255.0f,1.0f);
-	else 
+	else
 		s->SetUniform4f("lightColor",0.7f,0.8f,0.1f,1.0f);
 	s->Unbind();
+}
+
+unsigned char * Game::FloydSteinbergAlgorithm(unsigned char* data){
+    int top = -256 * 4;
+    int bottom	= 256 * 4;
+    int right = 4;
+    for(int x = 0; x < 256 * 255 * 4; x += 4) {
+        double error = data[x] - ((data[x] / 16) * 16);
+        //R
+        data[x] = (data[x] / 16) * 16;
+        data[x + bottom] = data[x + bottom] + (error * 7 / 16);
+        data[x + right + top] = data[x + right + top] + (error * 3 / 16);
+        data[x + right] = data[x + right] + (error * 5 / 16);
+        data[x + right + bottom] = data[x + right + bottom] + (error * 1 / 16);
+        //G
+        data[x + 1] = data[x];
+        data[x + 1 + bottom] = data[x + 1 + bottom] + (error * 7 / 16);
+        data[x + 1 + right + top] = data[x + 1 + right + top] + (error * 3 / 16);
+        data[x + 1 + right] = data[x + 1 + right] + (error * 5 / 16);
+        data[x + 1 + right + bottom] = data[x + 1 + right + bottom] + (error * 1 / 16);
+        //B
+        data[x + 2] = data[x];
+        data[x + 2 + bottom] = data[x + 2 + bottom] + (error * 7 / 16);
+        data[x + 2 + right + top] = data[x + 2 + right + top] + (error * 3 / 16);
+        data[x + 2 + right] = data[x + 2 + right] + (error * 5 / 16);
+        data[x + 2 + right + bottom] = data[x + 2 + right + bottom] + (error * 1 / 16);
+    }
+    return data;
 }
 
 void Game::WhenRotate()

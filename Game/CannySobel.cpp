@@ -295,7 +295,7 @@ vector<vector<char>>* CannySobel::secFilter(vector<vector<unsigned char>>* mat, 
     return newMat;
 }
 
-unsigned char* CannySobel::edgeDetector(vector<vector<unsigned char>>* data, int width, int height) {
+unsigned char* CannySobel::edgeDetector(int width, int height, vector<vector<unsigned char>>* data) {
     int div0;
     vector<vector<int>>* ones = gaussianKernel(&div0);
     vector<vector<unsigned char>>* afterFirstFilter = firstFilter(data, width, height, ones, div0);
