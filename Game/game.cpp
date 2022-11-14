@@ -56,7 +56,6 @@ unsigned char *Game::FloydSteinbergAlgorithm(unsigned char *image_data) {
     int bottom = 256 * 4;
     int right = 4;
     for (int x = 0; x < 256 * 255 * 4; x += 4) {
-        vector<unsigned char> current;
         double error = image_data[x] - ((image_data[x] / 16) * 16);
         //R
         image_data[x] = (image_data[x] / 16) * 16;
@@ -77,6 +76,7 @@ unsigned char *Game::FloydSteinbergAlgorithm(unsigned char *image_data) {
         image_data[x + 2 + right] = image_data[x + 2 + right] + (error * 5 / 16);
         image_data[x + 2 + right + bottom] = image_data[x + 2 + right + bottom] + (error * 1 / 16);
     }
+    exportImage("../img6.txt", oneDemensionAndGray(image_data,256,256), 256, 256, 16);
     return image_data;
 }
 
