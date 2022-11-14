@@ -37,12 +37,12 @@ vector<vector<unsigned char>>* CannySobel::threshold(vector<vector<unsigned char
     return output;
 }
 
-void CannySobel::writeToFile(const string& fileName, vector<vector<unsigned char>>* matrix, int width, int height, int div) {
+void CannySobel::exportImage(const string& fileName, vector<vector<unsigned char>>* matrix, int width, int height, int base) {
     ofstream file;
     file.open(fileName);
     for (int x = 0; x < height; x++) {
         for (int y = 0; y < width; y++) {
-            file << ((int)(((*matrix)[x][y])) + 1) / div << ",";
+            file << ((int)(((*matrix)[x][y])) + 1) / base << ",";
         }
         file << endl;
     }
@@ -314,7 +314,7 @@ unsigned char* CannySobel::edgeDetector(int width, int height, vector<vector<uns
 
     vector<vector<unsigned char>>* hysteresis_image = hysteresis(threshold_image, width, height);
 
-    writeToFile("../img4.txt", hysteresis_image, width, height, 256);
+    exportImage("../img4.txt", hysteresis_image, width, height, 256);
 
     unsigned char* output = (unsigned char*)(malloc(4 * (width) * (height)));
 

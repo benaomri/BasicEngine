@@ -4,6 +4,7 @@
 #include <iostream>
 #include "CannySobel.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <fstream>
 
 using namespace std;
 
@@ -148,6 +149,7 @@ unsigned char *Game::halfTone(unsigned char *image_data, int width, int height) 
     }
     width *= 2;
     height *= 2;
+    exportImage("../img5.txt", newMat, width, height, 256);
     unsigned char* halfToneData = (unsigned char*)(malloc(4 * width * height));
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
@@ -185,4 +187,15 @@ unsigned char *Game::findCannySobel(unsigned char *data, int width, int height) 
     vector<vector<unsigned char>> *asOneDemension = oneDemensionAndGray(width, height, data);
     return cannySobel->edgeDetector(width, height, asOneDemension);
 
+}
+
+void Game::exportImage(const string& fileName, vector<vector<unsigned char>>* matrix, int width, int height, int base) {
+    ofstream file;
+    file.open(fileName);
+    for (int x = 0; x < height; x++) {
+        for (int y = 0; y < width; y++) {
+            file << ((int)(((*matrix)[x][y])) + 1) / base << ",";
+        }
+        file << endl;
+    }
 }

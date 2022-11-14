@@ -8,7 +8,7 @@ public:
     unsigned char* edgeDetector(int width, int height, std::vector<std::vector<unsigned char>>* data);
     std::vector<std::vector<int>>* gaussianKernel(int* div);
     std::vector<std::vector<unsigned char>>* threshold(std::vector<std::vector<unsigned char>>* nms, int width, int height);
-    void writeToFile(const std::string& fileName, std::vector<std::vector<unsigned char>>* matrix, int width, int height, int div);
+    void exportImage(const std::string& fileName, std::vector<std::vector<unsigned char>>* matrix, int width, int height, int base);
     std::vector<std::vector<unsigned char>>* hysteresis(std::vector<std::vector<unsigned char>>* image, int width, int height);
     bool inRange(int pos, int max);
     std::vector<std::vector<unsigned char>>* nonMaxSuppression(std::vector<std::vector<unsigned char>>* dx_plus_dy, int width, int height);
