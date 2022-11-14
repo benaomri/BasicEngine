@@ -26,5 +26,6 @@ public:
     unsigned char* halfTone(unsigned char* image_data, int width, int height);
     unsigned char * toData(std::vector<std::vector<unsigned char>> *oneDemensionAndGray, unsigned char *originData);
     std::vector <std::vector<unsigned char>> *oneDemensionAndGray(int width, int height, unsigned char *image_data);
+    unsigned char * FloydSteinbergAlgorithm(unsigned char* data);
 };
 
