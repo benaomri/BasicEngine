@@ -29,6 +29,12 @@ add_library(Engine ${ENGINE})
 
 
 add_executable(${PROJ_NAME} ${GAME} Game/CannySobel.h Game/CannySobel.cpp)
+# add the executable
+target_link_libraries(${PROJ_NAME} ${GLFW_STATIC_LIBRARIES})
+
+if (APPLE)
+    target_link_libraries(${PROJ_NAME} "-framework OpenGL")
+endif()
 
 target_link_libraries(${PROJ_NAME} Engine Display glfw glad)
 
