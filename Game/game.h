@@ -24,8 +24,9 @@ public:
     ~Game(void);
 
     unsigned char* halfTone(unsigned char* image_data, int width, int height);
-    unsigned char * toData(std::vector<std::vector<unsigned char>> *oneDemensionAndGray, unsigned char *originData);
+    unsigned char * copyData(unsigned char *originData,int width,int height);
     std::vector <std::vector<unsigned char>> *oneDemensionAndGray(int width, int height, unsigned char *image_data);
     unsigned char * FloydSteinbergAlgorithm(unsigned char* data);
+    unsigned char * findCannySobel(unsigned char* data, int width, int height);
 };
 
