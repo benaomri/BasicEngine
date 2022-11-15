@@ -295,16 +295,37 @@ vector<vector<char>>* CannySobel::secFilter(vector<vector<unsigned char>>* mat, 
     return newMat;
 }
 
+void CannySobel::init(vector<vector<int>>* gauss, vector<vector<int>>* x, vector<vector<int>>* y,int *divG, int *divX, int *divY) {
+
+    gauss->push_back({ 1, 2, 1 });
+    gauss->push_back({ 2, 4, 2 });
+    gauss->push_back({ 1, 2, 1 });
+    *divG = 16;
+
+    x->push_back({ 0, 0, 0 });
+    x->push_back({ 0, -1, 0 });
+    x->push_back({ 0, 1, 0 });
+    *divX = 1;
+
+    y->push_back({ 0, 0, 0 });
+    y->push_back({ 0, -1, 1 });
+    y->push_back({ 0, 0, 0 });
+    *divY = 1;
+
+}
+
 unsigned char* CannySobel::edgeDetector(int width, int height, vector<vector<unsigned char>>* data) {
-    int div0;
-    vector<vector<int>>* ones = gaussianKernel(&div0);
-    vector<vector<unsigned char>>* afterFirstFilter = firstFilter(data, width, height, ones, div0);
-    int divForX;
-    vector<vector<int>>* kernelX = dxKernel(&divForX);
-    int divFory;
-    vector<vector<int>>* kernelY = dyKernel(&divFory);
+    int div;
+    int divForX ;
+    int divForY ;
+    vector<vector<int>>* gauss = new vector<vector<int>>();
+    vector<vector<int>>* kernelX = new vector<vector<int>>();
+    vector<vector<int>>* kernelY = new vector<vector<int>>();
+    init(gauss,kernelX,kernelY,&div,&divForX,&divForY);
+    //
+    vector<vector<unsigned char>>* afterFirstFilter = firstFilter(data, width, height, gauss, div);
     const vector<vector<char>>* dx = secFilter(afterFirstFilter, width, height, kernelX, divForX);
-    const vector<vector<char>>* dy = secFilter(afterFirstFilter, width, height, kernelY, divFory);
+    const vector<vector<char>>* dy = secFilter(afterFirstFilter, width, height, kernelY, divForY);
 
     vector<vector<unsigned char>>* dx_plus_dy = matrixAddition(dx, dy, width, height);
 
