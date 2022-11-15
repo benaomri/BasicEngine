@@ -6,16 +6,6 @@
 
 using namespace std;
 
-vector<vector<int>>* CannySobel::gaussianKernel(int* div) {
-    vector<vector<int>>* kernel = new vector<vector<int>>();
-    kernel->push_back({ 1, 2, 1 });
-    kernel->push_back({ 2, 4, 2 });
-    kernel->push_back({ 1, 2, 1 });
-    *div = 16;
-
-    return kernel;
-}
-
 vector<vector<unsigned char>>* CannySobel::threshold(vector<vector<unsigned char>>* nms, int width, int height) {
     unsigned char low = 5;
     unsigned char high = 26;
@@ -181,25 +171,6 @@ vector<vector<unsigned char>>* CannySobel::nonMaxSuppression(vector<vector<unsig
         }
     }
     return output;
-}
-
-vector<vector<int>>* CannySobel::dxKernel(int* div) {
-    vector<vector<int>>* kernel = new vector<vector<int>>();
-    kernel->push_back({ 0, 0, 0 });
-    kernel->push_back({ 0, -1, 0 });
-    kernel->push_back({ 0, 1, 0 });
-    *div = 1;
-    return kernel;
-}
-
-vector<vector<int>>* CannySobel::dyKernel(int* div) {
-    vector<vector<int>>* kernel = new vector<vector<int>>();
-    kernel->push_back({ 0, 0, 0 });
-    kernel->push_back({ 0, -1, 1 });
-    kernel->push_back({ 0, 0, 0 });
-    *div = 1;
-
-    return kernel;
 }
 
 vector<vector<unsigned char>>* CannySobel::matrixAddition(const vector<vector<char>>* dx, const vector<vector<char>>* dy, int width, int height) {
