@@ -51,30 +51,29 @@ void Game::Update(const glm::mat4 &MVP, const glm::mat4 &Model, const int shader
     s->Unbind();
 }
 
-unsigned char *Game::FloydSteinbergAlgorithm(unsigned char *image_data) {
+void Game::updateRGB(unsigned char *image_data,int x, double error, int newPixel){
     int top = -256 * 4;
     int bottom = 256 * 4;
     int right = 4;
+    image_data[x] = newPixel;
+    image_data[x + bottom] = image_data[x + bottom] + (error * 7 / 16);
+    image_data[x + right + top] = image_data[x + right + top] + (error * 3 / 16);
+    image_data[x + right] = image_data[x + right] + (error * 5 / 16);
+    image_data[x + right + bottom] = image_data[x + right + bottom] + (error * 1 / 16);
+}
+
+unsigned char *Game::FloydSteinbergAlgorithm(unsigned char *image_data) {
     for (int x = 0; x < 256 * 255 * 4; x += 4) {
-        double error = image_data[x] - ((image_data[x] / 16) * 16);
+        int newPixel = ((image_data[x] / 16) * 16);
+        double error = image_data[x] - newPixel;
         //R
-        image_data[x] = (image_data[x] / 16) * 16;
-        image_data[x + bottom] = image_data[x + bottom] + (error * 7 / 16);
-        image_data[x + right + top] = image_data[x + right + top] + (error * 3 / 16);
-        image_data[x + right] = image_data[x + right] + (error * 5 / 16);
-        image_data[x + right + bottom] = image_data[x + right + bottom] + (error * 1 / 16);
+        updateRGB(image_data, x,error,newPixel);
+
         //G
-        image_data[x + 1] = image_data[x];
-        image_data[x + 1 + bottom] = image_data[x + 1 + bottom] + (error * 7 / 16);
-        image_data[x + 1 + right + top] = image_data[x + 1 + right + top] + (error * 3 / 16);
-        image_data[x + 1 + right] = image_data[x + 1 + right] + (error * 5 / 16);
-        image_data[x + 1 + right + bottom] = image_data[x + 1 + right + bottom] + (error * 1 / 16);
+        updateRGB(image_data, x+1,error,newPixel);
+
         //B
-        image_data[x + 2] = image_data[x];
-        image_data[x + 2 + bottom] = image_data[x + 2 + bottom] + (error * 7 / 16);
-        image_data[x + 2 + right + top] = image_data[x + 2 + right + top] + (error * 3 / 16);
-        image_data[x + 2 + right] = image_data[x + 2 + right] + (error * 5 / 16);
-        image_data[x + 2 + right + bottom] = image_data[x + 2 + right + bottom] + (error * 1 / 16);
+        updateRGB(image_data, x+2,error,newPixel);
     }
     exportImage("../img6.txt", oneDemensionAndGray(image_data,256,256), 256, 256, 16);
     return image_data;
