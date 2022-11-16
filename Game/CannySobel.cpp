@@ -6,20 +6,19 @@
 
 using namespace std;
 
-vector<vector<unsigned char>>* CannySobel::threshold(vector<vector<unsigned char>>* nms, int width, int height) {
+vector<vector<unsigned char>> *CannySobel::threshold(vector<vector<unsigned char>> *nms, int width, int height) {
     unsigned char low = 5;
     unsigned char high = 26;
 
-    vector<vector<unsigned char>>* output = new vector<vector<unsigned char>>();
+    vector<vector<unsigned char>> *output = new vector<vector<unsigned char>>();
 
     for (int x = 0; x < height; x++) {
         vector<unsigned char> innerVec;
         for (int y = 0; y < width; y++) {
             if ((*nms)[x][y] >= high) {
-                innerVec.push_back((unsigned char)255);
-            }
-            else if (low <= (*nms)[x][y] <= high) {
-                innerVec.push_back((unsigned char)0);
+                innerVec.push_back((unsigned char) 255);
+            } else if (low <= (*nms)[x][y] <= high) {
+                innerVec.push_back((unsigned char) 0);
             }
         }
         output->push_back(innerVec);
@@ -27,106 +26,68 @@ vector<vector<unsigned char>>* CannySobel::threshold(vector<vector<unsigned char
     return output;
 }
 
-void CannySobel::exportImage(const string& fileName, vector<vector<unsigned char>>* matrix, int width, int height, int base) {
+void CannySobel::exportImage(const string &fileName, vector<vector<unsigned char>> *matrix, int width, int height,
+                             int base) {
     ofstream file;
     file.open(fileName);
     for (int x = 0; x < height; x++) {
         for (int y = 0; y < width; y++) {
-            file << ((int)(((*matrix)[x][y])) + 1) / base << ",";
+            file << ((int) (((*matrix)[x][y])) + 1) / base << ",";
         }
         file << endl;
     }
 }
 
-vector<vector<unsigned char>>* CannySobel::hysteresis(vector<vector<unsigned char>>* image, int width, int height) {
-    unsigned char edge = (unsigned char)255;
+vector<vector<unsigned char>> *CannySobel::hysteresis(vector<vector<unsigned char>> *image, int width, int height) {
+    unsigned char edge = (unsigned char) 255;
 
-    vector<vector<unsigned char>>* Z = new vector<vector<unsigned char>>();
+    vector<vector<unsigned char>> *output = new vector<vector<unsigned char>>();
 
     for (int x = 0; x < height; x++) {
         vector<unsigned char> innerVec(width, 0);
-        Z->push_back(innerVec);
+        output->push_back(innerVec);
     }
 
-    for (int x = 1; x < height; x++) {
-        for (int y = 1; y < width; y++) {
-            if (image->at(x).at(y) == (unsigned char)255) {
-                try {
-                    if (image->at(x + 1).at(y - 1) == edge) {
-                        Z->at(x).at(y) = edge;
-                    }
+    for (int x = 1; x < height - 1; x++) {
+        for (int y = 1; y < width - 1; y++) {
+            if (image->at(x).at(y) == (unsigned char) 255) {
+                if (image->at(x + 1).at(y - 1) == edge) {
+                    output->at(x).at(y) = edge;
                 }
-                catch (...) {
-                    //cout << 'pass' << endl;
+                if (image->at(x + 1).at(y) == edge) {
+                    output->at(x).at(y) = edge;
                 }
-                try {
-                    if (image->at(x + 1).at(y) == edge) {
-                        Z->at(x).at(y) = edge;
-                    }
+                if (image->at(x + 1).at(y + 1) == edge) {
+                    output->at(x).at(y) = edge;
                 }
-                catch (...) {
-                    //cout << 'pass' << endl;
+                if (image->at(x).at(y - 1) == edge) {
+                    output->at(x).at(y) = edge;
                 }
-                try {
-                    if (image->at(x + 1).at(y + 1) == edge) {
-                        Z->at(x).at(y) = edge;
-                    }
+                if (image->at(x).at(y + 1) == edge) {
+                    output->at(x).at(y) = edge;
                 }
-                catch (...) {
-                    //cout << 'pass' << endl;
+                if (image->at(x - 1).at(y - 1) == edge) {
+                    output->at(x).at(y) = edge;
                 }
-                try {
-                    if (image->at(x).at(y - 1) == edge) {
-                        Z->at(x).at(y) = edge;
-                    }
+                if (image->at(x - 1).at(y) == edge) {
+                    output->at(x).at(y) = edge;
                 }
-                catch (...) {
-                    //cout << 'pass' << endl;
-                }
-                try {
-                    if (image->at(x).at(y + 1) == edge) {
-                        Z->at(x).at(y) = edge;
-                    }
-                }
-                catch (...) {
-                    //cout << 'pass' << endl;
-                }
-                try {
-                    if (image->at(x - 1).at(y - 1) == edge) {
-                        Z->at(x).at(y) = edge;
-                    }
-                }
-                catch (...) {
-                    //cout << 'pass' << endl;
-                }
-                try {
-                    if (image->at(x - 1).at(y) == edge) {
-                        Z->at(x).at(y) = edge;
-                    }
-                }
-                catch (...) {
-                    //cout << 'pass' << endl;
-                }
-                try {
-                    if (image->at(x - 1).at(y + 1) == edge) {
-                        Z->at(x).at(y) = edge;
-                    }
-                }
-                catch (...) {
-                    //cout << 'pass' << endl;
+                if (image->at(x - 1).at(y + 1) == edge) {
+                    output->at(x).at(y) = edge;
                 }
             }
         }
     }
-    return Z;
+    return output;
 }
 
 bool CannySobel::inRange(int pos, int max) {
     return pos >= 0 && pos < max;
 }
 
-vector<vector<unsigned char>>* CannySobel::nonMaxSuppression(vector<vector<unsigned char>>* dx_plus_dy, int width, int height) {
-    vector<vector<unsigned char>>* output = new vector<vector<unsigned char>>();
+vector<vector<unsigned char>> *
+CannySobel::nonMaxSuppression(vector<vector<unsigned char>> *dx_plus_dy, int width, int height) {
+    vector<vector<unsigned char>> *output = new vector<vector<unsigned char>>();
 
     for (int i = 0; i < height; i++) {
         vector<unsigned char> innerVec(width, 0);
@@ -138,9 +99,9 @@ vector<vector<unsigned char>>* CannySobel::nonMaxSuppression(vector<vector<unsig
     for (int i = 0; i < height; i++) {
         vector<unsigned char> innerVec;
         for (int j = 0; j < width; j++) {
-            unsigned char angle = (*dx_plus_dy)[i][j] * (unsigned char)180 / 3.14;
+            unsigned char angle = (*dx_plus_dy)[i][j] * (unsigned char) 180 / 3.14;
             if (angle < 0) {
-                angle += (unsigned char)180;
+                angle += (unsigned char) 180;
             }
             innerVec.push_back(angle);
         }
@@ -160,9 +121,8 @@ vector<vector<unsigned char>>* CannySobel::nonMaxSuppression(vector<vector<unsig
                 }
                 if (((*dx_plus_dy)[x][y] >= q) && ((*dx_plus_dy)[x][y] >= r)) {
                     (*output)[x][y] = (*dx_plus_dy)[x][y];
-                }
-                else {
-                    (*output)[x][y] = (unsigned char)0;
+                } else {
+                    (*output)[x][y] = (unsigned char) 0;
                 }
             }
             catch (int num) {
@@ -173,8 +133,9 @@ vector<vector<unsigned char>>* CannySobel::nonMaxSuppression(vector<vector<unsig
     return output;
 }
 
-vector<vector<unsigned char>>* CannySobel::matrixAddition(const vector<vector<char>>* dx, const vector<vector<char>>* dy, int width, int height) {
-    vector<vector<unsigned char>>* added = new vector<vector<unsigned char>>();
+vector<vector<unsigned char>> *
+CannySobel::matrixAddition(const vector<vector<char>> *dx, const vector<vector<char>> *dy, int width, int height) {
+    vector<vector<unsigned char>> *added = new vector<vector<unsigned char>>();
     for (int i = 0; i < height; i++) {
         vector<unsigned char> innerVec;
         for (int j = 0; j < width; j++) {
@@ -185,13 +146,15 @@ vector<vector<unsigned char>>* CannySobel::matrixAddition(const vector<vector<ch
     return added;
 }
 
-vector<vector<unsigned char>>* CannySobel::firstFilter(vector<vector<unsigned char>>* mat, int width, int height, vector<vector<int>>* kernel, int div) {
+vector<vector<unsigned char>> *
+CannySobel::firstFilter(vector<vector<unsigned char>> *mat, int width, int height, vector<vector<int>> *kernel,
+                        int div) {
 
     vector<unsigned char> upper;
     for (int x = 0; x < width; x++) {
         upper.push_back(x % 100 + 100);
     }
-    vector<vector<unsigned char>>* outputMatrix = new vector<vector<unsigned char>>();
+    vector<vector<unsigned char>> *outputMatrix = new vector<vector<unsigned char>>();
 
     outputMatrix->push_back(upper);
 
@@ -223,9 +186,10 @@ vector<vector<unsigned char>>* CannySobel::firstFilter(vector<vector<unsigned ch
     return outputMatrix;
 }
 
-vector<vector<char>>* CannySobel::secFilter(vector<vector<unsigned char>>* mat, int width, int height, vector<vector<int>>* kernel, int div) {
+vector<vector<char>> *
+CannySobel::secFilter(vector<vector<unsigned char>> *mat, int width, int height, vector<vector<int>> *kernel, int div) {
     unsigned char threshold = 35;
-    vector<vector<char>>* newMat = new vector<vector<char>>();
+    vector<vector<char>> *newMat = new vector<vector<char>>();
 
     //upper end of the photo
     vector<char> upper;
@@ -266,53 +230,54 @@ vector<vector<char>>* CannySobel::secFilter(vector<vector<unsigned char>>* mat, 
     return newMat;
 }
 
-void CannySobel::init(vector<vector<int>>* gauss, vector<vector<int>>* x, vector<vector<int>>* y,int *divG, int *divX, int *divY) {
+void CannySobel::init(vector<vector<int>> *gauss, vector<vector<int>> *x, vector<vector<int>> *y, int *divG, int *divX,
+                      int *divY) {
 
-    gauss->push_back({ 1, 2, 1 });
-    gauss->push_back({ 2, 4, 2 });
-    gauss->push_back({ 1, 2, 1 });
+    gauss->push_back({1, 2, 1});
+    gauss->push_back({2, 4, 2});
+    gauss->push_back({1, 2, 1});
     *divG = 16;
 
-    x->push_back({ 0, 0, 0 });
-    x->push_back({ 0, -1, 0 });
-    x->push_back({ 0, 1, 0 });
+    x->push_back({0, 0, 0});
+    x->push_back({0, -1, 0});
+    x->push_back({0, 1, 0});
     *divX = 1;
 
-    y->push_back({ 0, 0, 0 });
-    y->push_back({ 0, -1, 1 });
-    y->push_back({ 0, 0, 0 });
+    y->push_back({0, 0, 0});
+    y->push_back({0, -1, 1});
+    y->push_back({0, 0, 0});
     *divY = 1;
 
 }
 
-unsigned char* CannySobel::edgeDetector(int width, int height, vector<vector<unsigned char>>* data) {
+unsigned char *CannySobel::edgeDetector(int width, int height, vector<vector<unsigned char>> *data) {
     int div;
-    int divForX ;
-    int divForY ;
-    vector<vector<int>>* gauss = new vector<vector<int>>();
-    vector<vector<int>>* kernelX = new vector<vector<int>>();
-    vector<vector<int>>* kernelY = new vector<vector<int>>();
-    init(gauss,kernelX,kernelY,&div,&divForX,&divForY);
+    int divForX;
+    int divForY;
+    vector<vector<int>> *gauss = new vector<vector<int>>();
+    vector<vector<int>> *kernelX = new vector<vector<int>>();
+    vector<vector<int>> *kernelY = new vector<vector<int>>();
+    init(gauss, kernelX, kernelY, &div, &divForX, &divForY);
     //
-    vector<vector<unsigned char>>* afterFirstFilter = firstFilter(data, width, height, gauss, div);
-    const vector<vector<char>>* dx = secFilter(afterFirstFilter, width, height, kernelX, divForX);
-    const vector<vector<char>>* dy = secFilter(afterFirstFilter, width, height, kernelY, divForY);
+    vector<vector<unsigned char>> *afterFirstFilter = firstFilter(data, width, height, gauss, div);
+    const vector<vector<char>> *dx = secFilter(afterFirstFilter, width, height, kernelX, divForX);
+    const vector<vector<char>> *dy = secFilter(afterFirstFilter, width, height, kernelY, divForY);
 
-    vector<vector<unsigned char>>* dx_plus_dy = matrixAddition(dx, dy, width, height);
+    vector<vector<unsigned char>> *dx_plus_dy = matrixAddition(dx, dy, width, height);
 
-    vector<vector<unsigned char>>* nonMax = nonMaxSuppression(dx_plus_dy, width, height);
+    vector<vector<unsigned char>> *nonMax = nonMaxSuppression(dx_plus_dy, width, height);
 
-    vector<vector<unsigned char>>* threshold_image = threshold(nonMax, width, height);
+    vector<vector<unsigned char>> *threshold_image = threshold(nonMax, width, height);
 
-    vector<vector<unsigned char>>* hysteresis_image = hysteresis(threshold_image, width, height);
+    vector<vector<unsigned char>> *hysteresis_image = hysteresis(threshold_image, width, height);
 
     exportImage("../img4.txt", hysteresis_image, width, height, 256);
 
-    unsigned char* output = (unsigned char*)(malloc(4 * (width) * (height)));
+    unsigned char *output = (unsigned char *) (malloc(4 * (width) * (height)));
 
     if (output != NULL) {
-        for(int x = 0; x < height; x++) {
-            for(int y = 0; y < width; y++) {
+        for (int x = 0; x < height; x++) {
+            for (int y = 0; y < width; y++) {
                 output[4 * (x * width + y)] = (*hysteresis_image)[x][y];
                 output[4 * (x * width + y) + sizeof(unsigned char)] = (*hysteresis_image)[x][y];
                 output[4 * (x * width + y) + 2 * sizeof(unsigned char)] = (*hysteresis_image)[x][y];
