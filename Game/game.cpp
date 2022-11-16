@@ -108,50 +108,50 @@ std::vector<std::vector<unsigned char>> *Game::oneDemensionAndGray(unsigned char
 
 unsigned char *Game::halfTone(unsigned char *image_data, int width, int height) {
     vector<vector<unsigned char>> *grey_scale_matrix = oneDemensionAndGray(image_data, width, height);
-    vector<vector<unsigned char>> *newMat = new vector<vector<unsigned char>>();
-    for (int i = 0; i < height; i++) {
-        vector<unsigned char> inner1;
-        vector<unsigned char> inner2;
-        for (int j = 0; j < width; j++) {
-            if ((*grey_scale_matrix)[i][j] <= 50) {
-                inner1.push_back(0);
-                inner1.push_back(0);
-                inner2.push_back(0);
-                inner2.push_back(0);
-            } else if ((*grey_scale_matrix)[i][j] <= 101) {
-                inner1.push_back(0);
-                inner1.push_back(0);
-                inner2.push_back(255);
-                inner2.push_back(0);
-            } else if ((*grey_scale_matrix)[i][j] <= 152) {
-                inner1.push_back(0);
-                inner1.push_back(255);
-                inner2.push_back(255);
-                inner2.push_back(0);
-            } else if ((*grey_scale_matrix)[i][j] <= 203) {
-                inner1.push_back(0);
-                inner1.push_back(255);
-                inner2.push_back(255);
-                inner2.push_back(255);
+    vector<vector<unsigned char>> *halfToneMatrix = new vector<vector<unsigned char>>();
+    for (int x = 0; x < height; x++) {
+        vector<unsigned char> newPixelRow1;
+        vector<unsigned char> newPixelRow2;
+        for (int y = 0; y < width; y++) {
+            if ((*grey_scale_matrix)[x][y] <= 50) {
+                newPixelRow1.push_back(0);
+                newPixelRow1.push_back(0);
+                newPixelRow2.push_back(0);
+                newPixelRow2.push_back(0);
+            } else if ((*grey_scale_matrix)[x][y] <= 101) {
+                newPixelRow1.push_back(0);
+                newPixelRow1.push_back(0);
+                newPixelRow2.push_back(255);
+                newPixelRow2.push_back(0);
+            } else if ((*grey_scale_matrix)[x][y] <= 152) {
+                newPixelRow1.push_back(0);
+                newPixelRow1.push_back(255);
+                newPixelRow2.push_back(255);
+                newPixelRow2.push_back(0);
+            } else if ((*grey_scale_matrix)[x][y] <= 203) {
+                newPixelRow1.push_back(0);
+                newPixelRow1.push_back(255);
+                newPixelRow2.push_back(255);
+                newPixelRow2.push_back(255);
             } else {
-                inner1.push_back(255);
-                inner1.push_back(255);
-                inner2.push_back(255);
-                inner2.push_back(255);
+                newPixelRow1.push_back(255);
+                newPixelRow1.push_back(255);
+                newPixelRow2.push_back(255);
+                newPixelRow2.push_back(255);
             }
         }
-        newMat->push_back(inner1);
-        newMat->push_back(inner2);
+        halfToneMatrix->push_back(newPixelRow1);
+        halfToneMatrix->push_back(newPixelRow2);
     }
     width *= 2;
     height *= 2;
-    exportImage("../img5.txt", newMat, width, height, 256);
+    exportImage("../img5.txt", halfToneMatrix, width, height, 256);
     unsigned char* halfToneData = (unsigned char*)(malloc(4 * width * height));
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-            halfToneData[4 * (i * width + j)] = (*newMat)[i][j];
-            halfToneData[4 * (i * width + j) + 1] = (*newMat)[i][j];
-            halfToneData[4 * (i * width + j) + 2] = (*newMat)[i][j];
+            halfToneData[4 * (i * width + j)] = (*halfToneMatrix)[i][j];
+            halfToneData[4 * (i * width + j) + 1] = (*halfToneMatrix)[i][j];
+            halfToneData[4 * (i * width + j) + 2] = (*halfToneMatrix)[i][j];
         }
     }
     return halfToneData;
@@ -170,7 +170,6 @@ unsigned char *Game::copyData(unsigned char *originData,int width,int height) {
             data_copy[4 * (i * current_row.size() + j)] = current_row.at(j);
             data_copy[4 * (i * current_row.size() + j) + 1] = current_row.at(j);
             data_copy[4 * (i * current_row.size() + j) + 2] = current_row.at(j);
-
         }
     }
 
