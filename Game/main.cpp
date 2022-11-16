@@ -24,32 +24,32 @@ int main(int argc,char *argv[])
     unsigned char *dataCopy = scn->copyData(image_data,width,height);
     unsigned char *FSdata= scn->FloydSteinbergAlgorithm(dataCopy);
 
-    scn->AddTexture(2*width, 2*height, halfToneData);     // texture 1
-    scn->AddTexture(width, height, FSdata);     // texture 1
-    scn->AddTexture(width, height, cannySobelData );     // texture 2
-    scn->AddTexture(width, height, image_data);     // texture 3
+    scn->AddTexture(2*width, 2*height, halfToneData);     //bottom left
+    scn->AddTexture(width, height, FSdata);     // bottom-right
+    scn->AddTexture(width, height, cannySobelData );     //  top-right
+    scn->AddTexture(width, height, image_data);     // top left
 
     scn->Init();
 
     display.SetScene(scn);
 
 
-    // texture 0
+    // bottom left
     scn->SetShapeTex(0, 0);
     glViewport(0, 0, DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2);
     scn->Draw(1, 0, scn->BACK, true, false);
 
-    // texture 1
+    //bottom-right
     scn->SetShapeTex(0, 1);
     glViewport( DISPLAY_WIDTH / 2, 0, DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2);
     scn->Draw(1, 0, scn->BACK, false, false);
 
-    // texture 2
+    //  top-right
     scn->SetShapeTex(0, 2);
     glViewport( DISPLAY_WIDTH / 2, DISPLAY_HEIGHT /2,DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2);
     scn->Draw(1, 0, scn->BACK, false, false);
 
-    // texture 3
+    //top left
     scn->SetShapeTex(0, 3);
     glViewport(0, DISPLAY_HEIGHT /2, DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2);
     scn->Draw(1, 0, scn->BACK, false, false);
