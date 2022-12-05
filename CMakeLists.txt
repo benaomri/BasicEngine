@@ -28,7 +28,12 @@ add_library(Display ${DISPLAY})
 add_library(Engine ${ENGINE})
 
 
-add_executable(${PROJ_NAME} ${GAME})
+add_executable(${PROJ_NAME} ${GAME} Configuration/Utils/Image.cpp Configuration/Utils/Image.h Configuration/Object/Object.cpp Configuration/Object/Object.h Configuration/Utils/Light.cpp Configuration/Utils/Light.h Configuration/Object/Sphere.cpp Configuration/Object/Sphere.h Configuration/Object/Plane.cpp Configuration/Object/Plane.h Configuration/Utils/SpotLight.cpp Configuration/Utils/SpotLight.h Configuration/Utils/DirectionalLight.cpp Configuration/Utils/DirectionalLight.h)
+if (APPLE)
+    target_link_libraries(${PROJ_NAME} "-framework OpenGL")
+else()
+    target_link_libraries(${PROJ_NAME} Engine Display opengl32.lib glfw glad)
+endif()
 
 target_link_libraries(${PROJ_NAME} Engine Display glfw glad)
 

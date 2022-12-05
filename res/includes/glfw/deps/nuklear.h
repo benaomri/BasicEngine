@@ -3769,7 +3769,7 @@ NK_API const char* nk_utf_at(const char *buffer, int length, int index, nk_rune 
 
     After successfully initializing the font baker you can add Truetype(.ttf) fonts from
     different sources like memory or from file by calling one of the `nk_font_atlas_add_xxx`.
-    functions. Adding font will permanently store each font, font config and ttf memory block(!)
+    functions. Adding font will permanently store each font, font Config and ttf memory block(!)
     inside the font atlas and allows to reuse the font atlas. If you don't want to reuse
     the font baker by for example adding additional fonts you can call
     `nk_font_atlas_cleanup` after the baking process is over (after calling nk_font_atlas_end).
@@ -13423,7 +13423,7 @@ nk_font_atlas_add(struct nk_font_atlas *atlas, const struct nk_font_config *conf
         !atlas->temporary.alloc || !atlas->temporary.free)
         return 0;
 
-    /* allocate font config  */
+    /* allocate font Config  */
     cfg = (struct nk_font_config*)
         atlas->permanent.alloc(atlas->permanent.userdata,0, sizeof(struct nk_font_config));
     NK_MEMCPY(cfg, config, sizeof(*config));
@@ -13431,7 +13431,7 @@ nk_font_atlas_add(struct nk_font_atlas *atlas, const struct nk_font_config *conf
     cfg->p = cfg;
 
     if (!config->merge_mode) {
-        /* insert font config into list */
+        /* insert font Config into list */
         if (!atlas->config) {
             atlas->config = cfg;
             cfg->next = 0;

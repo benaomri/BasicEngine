@@ -2,6 +2,9 @@
 // #include "../DisplayGLFW/display.h"
 #include "game.h"
 #include "../res/includes/glm/glm.hpp"
+#include "../Configuration/Config.h"
+
+using namespace std;
 
 int main(int argc,char *argv[])
 {
@@ -20,6 +23,11 @@ int main(int argc,char *argv[])
 	scn->Init();
 
 	display.SetScene(scn);
+    string file_name = "../scene.txt";
+
+    Config scene_data = Config();
+    scene_data.read_file(file_name, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+
 
 	while(!display.CloseWindow())
 	{
