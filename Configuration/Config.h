@@ -8,6 +8,7 @@
 #include "Object/Object.h"
 #include "Utils/Light.h"
 #include "glm/glm.hpp"
+#include "Utils/Hit.h"
 
 
 using namespace std;
@@ -15,10 +16,15 @@ using namespace glm;
 
 class Config {
 public:
-    void read_file(std::string file_name, int width, int height);
 
+    void read_file(string file_name, int width, int height);
+    vec3 ConstructRayThroughPixel(int i, int j);
+    Hit FindIntersection(vec3 ray);
     Image ImageRayCasting();
-
+    vec4 GetColor(vec3 ray, Hit hit, int level);
+    vec3 calcDiffuseColor(Hit hit, Light* light);
+    vec3 calcSpecularColor(Hit hit, Light* light);
+    float calcShadowTerm(Hit hit, Light* light);
 
 
     vector<vector<string>> scene_data;

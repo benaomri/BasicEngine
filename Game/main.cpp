@@ -27,7 +27,8 @@ int main(int argc,char *argv[])
 
     Config scene_data = Config();
     scene_data.read_file(file_name, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-
+    Image img = scene_data.ImageRayCasting();
+    scn->AddTexture(img.width, img.height, img.data);
 
 	while(!display.CloseWindow())
 	{

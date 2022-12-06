@@ -2,12 +2,13 @@
 #define GAME_OBJECT_H
 
 #include "glm/glm.hpp"
-#include "../Config.h"
 
+using namespace glm;
 enum objectType {
     Regular,
     Transparent,
-    Reflective
+    Reflective,
+    Space
 };
 class Object {
 public:
