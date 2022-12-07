@@ -1,8 +1,5 @@
-
-
 #ifndef GAME_SPHERE_H
 #define GAME_SPHERE_H
-
 
 #include "Object.h"
 

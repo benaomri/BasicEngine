@@ -1,5 +1,3 @@
-
-
 #ifndef GAME_DIRECTIONALLIGHT_H
 #define GAME_DIRECTIONALLIGHT_H
 
@@ -8,7 +6,6 @@
 class DirectionalLight : public Light{
 public:
     DirectionalLight(vec3 direction);
-    /*virtual void setParams(vec3 point, float cosAngle);*/
 };
 
 

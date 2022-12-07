@@ -1,10 +1,5 @@
-//
-// Created by noamm on 06/12/2022.
-//
-
 #ifndef GAME_HIT_H
 #define GAME_HIT_H
-
 
 #include "../Object/Object.h"
 #include "glm/glm.hpp"

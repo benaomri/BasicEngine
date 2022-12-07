@@ -1,5 +1,3 @@
-
-
 #include "Object.h"
 
 void Object::setColor(vec4 color) {
@@ -8,8 +6,6 @@ void Object::setColor(vec4 color) {
 }
 
 float Object::getAngle(vec3 hitVec, vec3 normal) {
-    // dot product returns cos ==> acos returns angle between the vectors (we need the angle between hitVec and plane)
-    // ==> subtracting pi/2 gives us the actual angle ==> division by 2*pi and multiply by 360 gives us an angle in degrees
     return (acos(dot(hitVec, normal)) - acos(.0)) / (4 * acos(.0)) * 360;
 }
 float vectorSize(vec3 vec) {

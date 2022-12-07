@@ -1,11 +1,4 @@
-//
-// Created by OMRI_PRIVATE on 05/12/2022.
-//
-
 #include "Image.h"
-
-
-//---------------------------------  Image  -------------------------------------------
 
 Image::Image(int width, int height) {
     this->width = width;

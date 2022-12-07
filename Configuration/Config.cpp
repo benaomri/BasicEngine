@@ -1,7 +1,3 @@
-//
-// Created by OMRI_PRIVATE on 05/12/2022.
-//
-
 #include "Config.h"
 #include "Object/Sphere.h"
 #include "Object/Plane.h"
@@ -14,9 +10,6 @@
 #include <sstream>
 
 using namespace std;
-
-
-
 
 void Config::read_file(string file_name, int width, int height) {
     int index = -1;
@@ -47,50 +40,55 @@ void Config::read_file(string file_name, int width, int height) {
         vec4 input_vector = vec4(stof(scene_data[i][1]), stof(scene_data[i][2]), stof(scene_data[i][3]),
                                  stof(scene_data[i][4]));
 
-        // e = eye - XYZ + Bonus Mode Flag
+        // e = eye
         if (scene_data[i][0] == "e") {
             eye = vec3(input_vector.x, input_vector.y, input_vector.z);
             bonus_mode_flag = input_vector.w;
         }
-        // a = ambient - RGBA
+        // a = ambient
         if (scene_data[i][0] == "a") {
             ambient = input_vector;
         }
-        // r = reflective object - XYZW (W>0 -> Spheres) / (W<0 -> Planes)
-        if (scene_data[i][0] == "r") {
-            if (input_vector.w > 0)
-                objects.push_back(new Sphere(input_vector, Reflective));
-            else objects.push_back(new Plane(input_vector, Reflective));
-        }
-        // t = transparent object - XYZW (W>0 -> Spheres) / (W<0 -> Planes)
-        if (scene_data[i][0] == "t") {
-            if (input_vector.w > 0)
-                objects.push_back(new Sphere(input_vector, Transparent));
-            else objects.push_back(new Plane(input_vector, Transparent));
-        }
-        // o = object - XYZW (W>0 -> Spheres) / (W<0 -> Planes)
-        if (scene_data[i][0] == "o") {
-            if (input_vector.w > 0)
-                objects.push_back(new Sphere(input_vector, Regular));
-            else objects.push_back(new Plane(input_vector, Regular));
-        }
-        // c = color (ambient and diffuse of object) - RGBA (A -> Shininess)
-        if (scene_data[i][0] == "c") {
-            colors.push_back(input_vector);
-        }
-        // d = direction (of light sources) - XYZW
+
+        // d = direction
         if (scene_data[i][0] == "d") {
             if (input_vector.w > 0)
                 lights.push_back(new SpotLight(vec3(input_vector.x, input_vector.y, input_vector.z)));
             else lights.push_back(new DirectionalLight(vec3(input_vector.x, input_vector.y, input_vector.z)));
         }
-        // p = position (of spotlights only) - XYZW
+
+        // p = position
         if (scene_data[i][0] == "p") {
             positions.push_back(input_vector);
         }
-        // i = intensity (of light sources) - RGBA
+
+        // i = intensity
         if (scene_data[i][0] == "i") {
             intensities.push_back(input_vector);
+        }
+
+        // o = object
+        if (scene_data[i][0] == "o") {
+            if (input_vector.w > 0)
+                objects.push_back(new Sphere(input_vector, Regular));
+            else objects.push_back(new Plane(input_vector, Regular));
+        }
+        // r = reflective object
+        if (scene_data[i][0] == "r") {
+            if (input_vector.w > 0)
+                objects.push_back(new Sphere(input_vector, Reflective));
+            else objects.push_back(new Plane(input_vector, Reflective));
+        }
+        // t = transparent object
+        if (scene_data[i][0] == "t") {
+            if (input_vector.w > 0)
+                objects.push_back(new Sphere(input_vector, Transparent));
+            else objects.push_back(new Plane(input_vector, Transparent));
+        }
+
+        // c = color
+        if (scene_data[i][0] == "c") {
+            colors.push_back(input_vector);
         }
     }
 

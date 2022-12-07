@@ -1,7 +1,5 @@
-
 #ifndef GAME_LIGHT_H
 #define GAME_LIGHT_H
-
 
 #include "glm/glm.hpp"
 
@@ -22,6 +20,5 @@ public:
     float shiness;
     virtual void setIntensity(vec4 intensity);
 };
-
 
 #endif //GAME_LIGHT_H
