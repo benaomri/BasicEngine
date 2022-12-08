@@ -52,7 +52,7 @@ void Config::read_file(string file_name, int width, int height) {
             ambient = input_vector;
 
 
-        // d = direction
+        // d = directional
         if (scene_data[i][0] == "d") {
             input_vector.w > 0 ? lights.push_back(new SpotLight(vec3(input_vector.x, input_vector.y, input_vector.z)))
                                : lights.push_back(
@@ -148,17 +148,13 @@ vec3 Config::ConstructRayThroughPixel(int i, int j) {
 
 
 Hit Config::FindIntersection(vec3 ray) {
-    // Set Default Values
     float min_t = INFINITY;
     Object *min_primitive = new Plane(vec4(1.0, 1.0, 1.0, 1.0), Space);
     min_primitive->setColor(vec4(0.0, 0.0, 0.0, 0.0));
     bool got_hit = false;
 
-    // Looping over all the objects
     for (int i = 0; i < objects.size(); i++) {
         float t = objects[i]->FindIntersection(ray, eye);
-        //float t = Intersect(ray, objects[i]);
-
         if ((t > 0) && (t < min_t)) {
             got_hit = true;
             min_primitive = objects[i];
@@ -166,11 +162,9 @@ Hit Config::FindIntersection(vec3 ray) {
         }
     }
 
-    Hit hit = Hit(eye + ray, min_primitive);
-    if (got_hit) {
-        hit = Hit(eye + ray * min_t, min_primitive);
-    }
-    return hit;
+    return got_hit ? Hit(eye + ray * min_t, min_primitive)
+                   : Hit(eye + ray, min_primitive);
+
 }
 
 vec4 Config::GetColor(vec3 ray, Hit hit, int level) {
@@ -206,8 +200,7 @@ vec4 Config::GetColor(vec3 ray, Hit hit, int level) {
 }
 
 vec3 Config::calcDiffuseColor(Hit hit, Light *light) {
-    float object_factor = 1;
-    if (hit.obj->details.w < 0.0) object_factor = -1;
+    float object_factor = (hit.obj->details.w < 0.0 ) ? -1 : 1;
 
     vec3 normalized_ray_direction = object_factor * normalizedVector(light->direction);
 

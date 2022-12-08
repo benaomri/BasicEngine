@@ -22,7 +22,7 @@ float Plane::FindIntersection(vec3 ray, vec3 somePointOnRay) {
     vec3 planeNormal = this->normal();
     float d = this->d();
     float ans = INFINITY;
-    if (abs(dot(ray, planeNormal)) > 0.0) {
+    if (dot(ray, planeNormal) != 0.0) {
         return -(dot(somePointOnRay, planeNormal) + d) / dot(ray, planeNormal);
     }
     return ans;
