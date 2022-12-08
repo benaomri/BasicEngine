@@ -37,7 +37,9 @@ void Config::read_file(string file_name, int width, int height) {
     }
 
     for (int i = 0; i < scene_data.size(); i++) {
-        vec4 input_vector = vec4(stof(scene_data[i][1]), stof(scene_data[i][2]), stof(scene_data[i][3]),
+        vec4 input_vector = vec4(stof(scene_data[i][1]),
+                                 stof(scene_data[i][2]),
+                                 stof(scene_data[i][3]),
                                  stof(scene_data[i][4]));
 
         // e = eye
@@ -46,50 +48,49 @@ void Config::read_file(string file_name, int width, int height) {
             bonus_mode_flag = input_vector.w;
         }
         // a = ambient
-        if (scene_data[i][0] == "a") {
+        if (scene_data[i][0] == "a")
             ambient = input_vector;
-        }
+
 
         // d = direction
         if (scene_data[i][0] == "d") {
-            if (input_vector.w > 0)
-                lights.push_back(new SpotLight(vec3(input_vector.x, input_vector.y, input_vector.z)));
-            else lights.push_back(new DirectionalLight(vec3(input_vector.x, input_vector.y, input_vector.z)));
+            input_vector.w > 0 ? lights.push_back(new SpotLight(vec3(input_vector.x, input_vector.y, input_vector.z)))
+                               : lights.push_back(
+                    new DirectionalLight(vec3(input_vector.x, input_vector.y, input_vector.z)));
+
         }
 
         // p = position
-        if (scene_data[i][0] == "p") {
+        if (scene_data[i][0] == "p")
             positions.push_back(input_vector);
-        }
+
 
         // i = intensity
-        if (scene_data[i][0] == "i") {
+        if (scene_data[i][0] == "i")
             intensities.push_back(input_vector);
-        }
+
 
         // o = object
         if (scene_data[i][0] == "o") {
-            if (input_vector.w > 0)
-                objects.push_back(new Sphere(input_vector, Regular));
-            else objects.push_back(new Plane(input_vector, Regular));
+            input_vector.w > 0 ? objects.push_back(new Sphere(input_vector, Regular))
+                               : objects.push_back(new Plane(input_vector, Regular));
+
         }
         // r = reflective object
         if (scene_data[i][0] == "r") {
-            if (input_vector.w > 0)
-                objects.push_back(new Sphere(input_vector, Reflective));
-            else objects.push_back(new Plane(input_vector, Reflective));
+            input_vector.w > 0 ? objects.push_back(new Sphere(input_vector, Reflective))
+                               : objects.push_back(new Plane(input_vector, Reflective));
         }
         // t = transparent object
         if (scene_data[i][0] == "t") {
-            if (input_vector.w > 0)
-                objects.push_back(new Sphere(input_vector, Transparent));
-            else objects.push_back(new Plane(input_vector, Transparent));
+            input_vector.w > 0 ? objects.push_back(new Sphere(input_vector, Transparent))
+                               : objects.push_back(new Plane(input_vector, Transparent));
         }
 
         // c = color
-        if (scene_data[i][0] == "c") {
+        if (scene_data[i][0] == "c")
             colors.push_back(input_vector);
-        }
+
     }
 
     // Set objects colors
@@ -118,7 +119,6 @@ void Config::read_file(string file_name, int width, int height) {
 }
 
 
-
 Image Config::ImageRayCasting() {
     Image image = Image(image_width, image_height);
 
@@ -129,7 +129,7 @@ Image Config::ImageRayCasting() {
             }
             vec3 ray = ConstructRayThroughPixel(i, j);
             Hit hit = FindIntersection(ray);
-            vec4 pixel_color = GetColor(ray, hit,0);
+            vec4 pixel_color = GetColor(ray, hit, 0);
 
             image.setColor(i, j, pixel_color);
         }
@@ -150,7 +150,7 @@ vec3 Config::ConstructRayThroughPixel(int i, int j) {
 Hit Config::FindIntersection(vec3 ray) {
     // Set Default Values
     float min_t = INFINITY;
-    Object* min_primitive = new Plane(vec4(1.0, 1.0, 1.0, 1.0), Space);
+    Object *min_primitive = new Plane(vec4(1.0, 1.0, 1.0, 1.0), Space);
     min_primitive->setColor(vec4(0.0, 0.0, 0.0, 0.0));
     bool got_hit = false;
 
@@ -190,7 +190,8 @@ vec4 Config::GetColor(vec3 ray, Hit hit, int level) {
         if (level == 3) { // MAX_LEVEL=3
             return vec4(0, 0, 0, 0);
         }
-        vec3 reflection_ray = ray - 2.0f * hit.obj->getNormal(hit.hitPoint) * dot(ray, hit.obj->getNormal(hit.hitPoint));
+        vec3 reflection_ray =
+                ray - 2.0f * hit.obj->getNormal(hit.hitPoint) * dot(ray, hit.obj->getNormal(hit.hitPoint));
         Hit reflected_hit = FindIntersection(reflection_ray);
 
         if (reflected_hit.obj->objType == Space) {
@@ -204,7 +205,7 @@ vec4 Config::GetColor(vec3 ray, Hit hit, int level) {
     return vec4(phong_model_color.r, phong_model_color.g, phong_model_color.b, 0.0);
 }
 
-vec3 Config::calcDiffuseColor(Hit hit, Light* light) {
+vec3 Config::calcDiffuseColor(Hit hit, Light *light) {
     float object_factor = 1;
     if (hit.obj->details.w < 0.0) object_factor = -1;
 
@@ -212,12 +213,11 @@ vec3 Config::calcDiffuseColor(Hit hit, Light* light) {
 
     if (light->liType == Spot) {
         vec3 virtual_spotlight_ray = normalizedVector(hit.hitPoint - light->position);
-        float light_cos_value = dot(virtual_spotlight_ray, object_factor *normalized_ray_direction);
+        float light_cos_value = dot(virtual_spotlight_ray, object_factor * normalized_ray_direction);
 
         if (light_cos_value < light->cosAngle) {
             return vec3(0.0, 0.0, 0.0);
-        }
-        else {
+        } else {
             normalized_ray_direction = object_factor * virtual_spotlight_ray;
         }
     }
@@ -231,7 +231,7 @@ vec3 Config::calcDiffuseColor(Hit hit, Light* light) {
     return diffuse_color;
 }
 
-vec3 Config::calcSpecularColor(Hit hit, Light* light) {
+vec3 Config::calcSpecularColor(Hit hit, Light *light) {
     vec3 normalized_ray_direction = normalizedVector(light->direction);
 
     if (light->liType == Spot) {
@@ -240,13 +240,13 @@ vec3 Config::calcSpecularColor(Hit hit, Light* light) {
 
         if (light_cos_value < light->cosAngle) {
             return vec3(0.0, 0.0, 0.0);
-        }
-        else {
+        } else {
             normalized_ray_direction = virtual_spotlight_ray;
         }
     }
     vec3 object_normal = hit.obj->getNormal(hit.hitPoint);
-    vec3 reflected_light_ray = normalized_ray_direction - 2.0f * object_normal * dot(normalized_ray_direction, object_normal);
+    vec3 reflected_light_ray =
+            normalized_ray_direction - 2.0f * object_normal * dot(normalized_ray_direction, object_normal);
     vec3 ray_to_viewer = normalizedVector(eye - hit.hitPoint);
 
     // V^*R^ = max(0, V^*R^)
@@ -261,7 +261,7 @@ vec3 Config::calcSpecularColor(Hit hit, Light* light) {
     return speculat_color;
 }
 
-float Config::calcShadowTerm(Hit hit, Light* light) {
+float Config::calcShadowTerm(Hit hit, Light *light) {
     vec3 normalized_ray_direction = normalizedVector(light->direction);
 
     if (light->liType == Spot) {
@@ -270,8 +270,7 @@ float Config::calcShadowTerm(Hit hit, Light* light) {
 
         if (light_cos_value < light->cosAngle) {
             return 0.0;
-        }
-        else {
+        } else {
             normalized_ray_direction = virtual_spotlight_ray;
         }
     }
