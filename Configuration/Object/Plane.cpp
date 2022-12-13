@@ -18,13 +18,23 @@ float Plane::d() {
     return details.w;
 }
 
-float Plane::FindIntersection(vec3 ray, vec3 somePointOnRay) {
+float Plane::FindIntersection(Ray ray) {
     vec3 planeNormal = this->normal();
+    float a = planeNormal.x;
+    float b = planeNormal.y;
+    float c = planeNormal.z;
     float d = this->d();
-    float ans = INFINITY;
-    if (dot(ray, planeNormal) != 0.0) {
-        return -(dot(somePointOnRay, planeNormal) + d) / dot(ray, planeNormal);
-    }
+
+    float x0 = ray.position.x;
+    float y0 = ray.position.y;
+    float z0 = ray.position.z;
+
+    float vecx = ray.direction.x;
+    float vecy = ray.direction.y;
+    float vecz = ray.direction.z;
+
+    float ans = -(a * x0 + b * y0 + c * z0 + d) / (a * vecx + b * vecy + c * vecz);
+
     return ans;
 }
 

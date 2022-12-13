@@ -9,7 +9,7 @@
 #include "Utils/Light.h"
 #include "glm/glm.hpp"
 #include "Utils/Hit.h"
-
+#include "Object/Ray.h"
 
 using namespace std;
 using namespace glm;
@@ -18,12 +18,12 @@ class Config {
 public:
 
     void read_file(string file_name, int width, int height);
-    vec3 ConstructRayThroughPixel(int i, int j);
-    Hit FindIntersection(vec3 ray, vec3 starting_ray);
+    Ray ConstructRayThroughPixel(int i, int j, int position_on_pixel);
+    Hit FindIntersection(Ray ray, int ignore_object_index);
     Image ImageRayCasting();
-    vec4 GetColor(vec3 ray, Hit hit, vec3 starting_ray, int level);
+    vec4 GetColor(Ray ray, Hit hit, int depth);
     vec3 calcDiffuseColor(Hit hit, Light* light);
-    vec3 calcSpecularColor(Hit hit, Light* light, vec3 starting_ray);
+    vec3 calcSpecularColor(Ray ray, Hit hit, Light* light);
     float calcShadowTerm(Hit hit, Light* light);
 
 

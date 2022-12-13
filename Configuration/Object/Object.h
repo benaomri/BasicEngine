@@ -2,7 +2,7 @@
 #define GAME_OBJECT_H
 
 #include "glm/glm.hpp"
-#include "../Utils/Ray.h"
+#include "Ray.h"
 
 using namespace glm;
 enum objectType {
@@ -19,7 +19,7 @@ public:
     float shiness;
     int objIndex;
 
-    virtual float FindIntersection(vec3 ray, vec3 somePointOnRay) = 0;
+    virtual float FindIntersection(Ray ray) = 0;
     virtual void setColor(vec4 color);
     virtual vec3 getColor(vec3 hitPoint) = 0;
     virtual float getAngle(vec3 ray, vec3 hitPoint);
