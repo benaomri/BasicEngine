@@ -19,11 +19,11 @@ public:
 
     void read_file(string file_name, int width, int height);
     vec3 ConstructRayThroughPixel(int i, int j);
-    Hit FindIntersection(vec3 ray);
+    Hit FindIntersection(vec3 ray, vec3 starting_ray);
     Image ImageRayCasting();
-    vec4 GetColor(vec3 ray, Hit hit, int level);
+    vec4 GetColor(vec3 ray, Hit hit, vec3 starting_ray, int level);
     vec3 calcDiffuseColor(Hit hit, Light* light);
-    vec3 calcSpecularColor(Hit hit, Light* light);
+    vec3 calcSpecularColor(Hit hit, Light* light, vec3 starting_ray);
     float calcShadowTerm(Hit hit, Light* light);
 
 

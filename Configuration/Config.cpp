@@ -124,12 +124,12 @@ Image Config::ImageRayCasting() {
 
     for (int j = 0; j < image_height; j++) {
         for (int i = 0; i < image_width; i++) {
-            if ((i == 200) && (j == 600)) {
+            if ((i == 750) && (j == 500)) {
                 cout << "TEST" << endl;
             }
             vec3 ray = ConstructRayThroughPixel(i, j);
-            Hit hit = FindIntersection(ray);
-            vec4 pixel_color = GetColor(ray, hit, 0);
+            Hit hit = FindIntersection(ray, eye);
+            vec4 pixel_color = GetColor(ray, hit, eye, 0);
 
             image.setColor(i, j, pixel_color);
         }
@@ -147,14 +147,14 @@ vec3 Config::ConstructRayThroughPixel(int i, int j) {
 }
 
 
-Hit Config::FindIntersection(vec3 ray) {
+Hit Config::FindIntersection(vec3 ray, vec3 starting_ray) {
     float min_t = INFINITY;
     Object *min_primitive = new Plane(vec4(1.0, 1.0, 1.0, 1.0), Space);
     min_primitive->setColor(vec4(0.0, 0.0, 0.0, 0.0));
     bool got_hit = false;
 
     for (int i = 0; i < objects.size(); i++) {
-        float t = objects[i]->FindIntersection(ray, eye);
+        float t = objects[i]->FindIntersection(ray, starting_ray);
         if ((t > 0) && (t < min_t)) {
             got_hit = true;
             min_primitive = objects[i];
@@ -167,13 +167,13 @@ Hit Config::FindIntersection(vec3 ray) {
 
 }
 
-vec4 Config::GetColor(vec3 ray, Hit hit, int level) {
+vec4 Config::GetColor(vec3 ray, Hit hit, vec3 starting_ray, int level) {
     vec3 color = hit.obj->getColor(hit.hitPoint);
     vec3 phong_model_color = color * vec3(ambient.r, ambient.g, ambient.b); // Ambient
 
     for (int i = 0; i < lights.size(); i++) {
         vec3 diffuse_color = max(calcDiffuseColor(hit, lights[i]), vec3(0, 0, 0)); // Diffuse
-        vec3 specular_color = max(calcSpecularColor(hit, lights[i]), vec3(0, 0, 0)); // Specular
+        vec3 specular_color = max(calcSpecularColor(hit, lights[i], starting_ray), vec3(0, 0, 0)); // Specular
         float shadow_term = calcShadowTerm(hit, lights[i]);
 
         phong_model_color += (diffuse_color + specular_color) * shadow_term;
@@ -181,19 +181,20 @@ vec4 Config::GetColor(vec3 ray, Hit hit, int level) {
     phong_model_color = min(phong_model_color, vec3(1.0, 1.0, 1.0));
 
     if (hit.obj->objType == Reflective) {
-        if (level == 3) { // MAX_LEVEL=3
+        if (level == 1) { // MAX_LEVEL=1
             return vec4(0, 0, 0, 0);
         }
         vec3 reflection_ray =
                 ray - 2.0f * hit.obj->getNormal(hit.hitPoint) * dot(ray, hit.obj->getNormal(hit.hitPoint));
-        Hit reflected_hit = FindIntersection(reflection_ray);
+        Hit reflected_hit = FindIntersection(reflection_ray, hit.hitPoint);
 
         if (reflected_hit.obj->objType == Space) {
             return vec4(0, 0, 0, 0);
         }
 
-        vec4 reflection_color = GetColor(reflection_ray, reflected_hit, level + 1);
-        phong_model_color += hit.obj->rgb_color * vec3(reflection_color.r, reflection_color.g, reflection_color.b);
+        vec4 reflection_color = GetColor(reflection_ray, reflected_hit, hit.hitPoint, level + 1);
+        phong_model_color = vec3(starting_ray.r, starting_ray.g, reflection_color.b);
+        phong_model_color = min(phong_model_color, vec3(1.0, 1.0, 1.0));
     }
 
     return vec4(phong_model_color.r, phong_model_color.g, phong_model_color.b, 0.0);
@@ -224,7 +225,7 @@ vec3 Config::calcDiffuseColor(Hit hit, Light *light) {
     return diffuse_color;
 }
 
-vec3 Config::calcSpecularColor(Hit hit, Light *light) {
+vec3 Config::calcSpecularColor(Hit hit, Light *light, vec3 starting_ray) {
     vec3 normalized_ray_direction = normalizedVector(light->direction);
 
     if (light->liType == Spot) {
@@ -240,7 +241,7 @@ vec3 Config::calcSpecularColor(Hit hit, Light *light) {
     vec3 object_normal = hit.obj->getNormal(hit.hitPoint);
     vec3 reflected_light_ray =
             normalized_ray_direction - 2.0f * object_normal * dot(normalized_ray_direction, object_normal);
-    vec3 ray_to_viewer = normalizedVector(eye - hit.hitPoint);
+    vec3 ray_to_viewer = normalizedVector(starting_ray - hit.hitPoint);
 
     // V^*R^ = max(0, V^*R^)
     float hit_cos_value = dot(ray_to_viewer, reflected_light_ray);
@@ -256,6 +257,7 @@ vec3 Config::calcSpecularColor(Hit hit, Light *light) {
 
 float Config::calcShadowTerm(Hit hit, Light *light) {
     vec3 normalized_ray_direction = normalizedVector(light->direction);
+    float min_t = INFINITY;
 
     if (light->liType == Spot) {
         vec3 virtual_spotlight_ray = normalizedVector(hit.hitPoint - light->position);
@@ -265,12 +267,11 @@ float Config::calcShadowTerm(Hit hit, Light *light) {
             return 0.0;
         } else {
             normalized_ray_direction = virtual_spotlight_ray;
+            // Update min_t
+            min_t = -(dot(hit.hitPoint, light->position)) / abs(dot(-normalized_ray_direction, light->position));
         }
     }
 
-    // Checking the path between the light source and the object
-    float min_t = INFINITY;
-    // Looping over all the objects
     for (int i = 0; i < objects.size(); i++) {
         if (i != hit.obj->objIndex) {
             float t = objects[i]->FindIntersection(-normalized_ray_direction, hit.hitPoint);

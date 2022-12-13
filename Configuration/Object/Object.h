@@ -2,6 +2,7 @@
 #define GAME_OBJECT_H
 
 #include "glm/glm.hpp"
+#include "../Utils/Ray.h"
 
 using namespace glm;
 enum objectType {
