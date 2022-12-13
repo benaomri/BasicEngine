@@ -9,7 +9,7 @@
 #include "Utils/Light.h"
 #include "glm/glm.hpp"
 #include "Utils/Hit.h"
-#include "Object/Ray.h"
+#include "Utils/Ray.h"
 
 using namespace std;
 using namespace glm;
