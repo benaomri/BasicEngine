@@ -17,9 +17,9 @@ using namespace glm;
 class Config {
 public:
 
-    void read_file(string file_name, int width, int height);
-    Ray ConstructRayThroughPixel(int i, int j, int position_on_pixel);
-    Hit FindIntersection(Ray ray, int ignore_object_index);
+    void readSceneFile(string fileName, int width, int height);
+    Ray ConstructRayThroughPixel(int i, int j, int positionOnPixel);
+    Hit FindIntersection(Ray ray, int ignoreObjectIndex);
     Image ImageRayCasting();
     vec4 GetColor(Ray ray, Hit hit, int depth);
     vec3 calcDiffuseColor(Hit hit, Light* light);
@@ -40,7 +40,7 @@ public:
     vector<vec4> intensities;
 
     int image_width, image_height;
-    float pixel_width, pixel_height;
+    float pixelWidth, pixelHeight;
 
     vec3 forward_vector;
     vec3 up_vector;

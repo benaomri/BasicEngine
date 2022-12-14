@@ -12,7 +12,7 @@ enum lightType {
 
 class Light {
 public:
-    lightType liType;
+    lightType lightType;
     vec3 direction;
     vec3 position;
     float cosAngle;

@@ -1,6 +1,6 @@
 #include "SpotLight.h"
 
 SpotLight::SpotLight(vec3 direction) {
-    this->liType = Spot;
+    this->lightType = Spot;
     this->direction = direction;
 }

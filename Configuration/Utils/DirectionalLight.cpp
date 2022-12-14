@@ -1,5 +1,5 @@
 #include "DirectionalLight.h"
 DirectionalLight::DirectionalLight(vec3 direction) {
-    this->liType = Directional;
+    this->lightType = Directional;
     this->direction = direction;
 }
