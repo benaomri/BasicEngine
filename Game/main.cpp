@@ -2,6 +2,9 @@
 // #include "../DisplayGLFW/display.h"
 #include "game.h"
 #include "../res/includes/glm/glm.hpp"
+#include "../Configuration/Config.h"
+
+using namespace std;
 
 int main(int argc,char *argv[])
 {
@@ -20,6 +23,12 @@ int main(int argc,char *argv[])
 	scn->Init();
 
 	display.SetScene(scn);
+    string fileName = "../scene4.txt";
+
+    Config sceneConfigure = Config();
+    sceneConfigure.readSceneFile(fileName, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+    Image img = sceneConfigure.ImageRayCasting();
+    scn->AddTexture(img.width, img.height, img.data);
 
 	while(!display.CloseWindow())
 	{

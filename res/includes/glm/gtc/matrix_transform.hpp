@@ -227,7 +227,7 @@ namespace glm
 	GLM_FUNC_DECL detail::tmat4x4<T, P> tweakedInfinitePerspective(
 		T fovy, T aspect, T near);
 
-	/// Map the specified object coordinates (obj.x, obj.y, obj.z) into window coordinates.
+	/// Map the specified object coordinates (object.x, object.y, object.z) into window coordinates.
 	/// 
 	/// @param obj 
 	/// @param model 

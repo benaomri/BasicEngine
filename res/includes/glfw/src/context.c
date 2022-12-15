@@ -171,7 +171,7 @@ GLFWbool _glfwIsValidContextConfig(const _GLFWctxconfig* ctxconfig)
     return GLFW_TRUE;
 }
 
-// Chooses the framebuffer config that best matches the desired one
+// Chooses the framebuffer Config that best matches the desired one
 //
 const _GLFWfbconfig* _glfwChooseFBConfig(const _GLFWfbconfig* desired,
                                          const _GLFWfbconfig* alternatives,

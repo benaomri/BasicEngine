@@ -90,7 +90,7 @@ static GLfloat projection_matrix[16] = {
     0.0f, 0.0f, 0.0f, 1.0f
 };
 
-/* Model view matrix */
+/* Object view matrix */
 static GLfloat modelview_matrix[16] = {
     1.0f, 0.0f, 0.0f, 0.0f,
     0.0f, 1.0f, 0.0f, 0.0f,
