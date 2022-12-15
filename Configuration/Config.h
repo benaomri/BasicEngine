@@ -18,8 +18,8 @@ class Config {
 public:
 
     void readSceneFile(string fileName, int width, int height);
-    Ray ConstructRayThroughPixel(int i, int j, int positionOnPixel);
-    Hit getHitIntersection(Ray ray, int ignoreObjectIndex);
+    Ray ConstructRayThroughPixel(int i, int j, int rayNumber);
+    Hit FindIntersection(Ray ray, int ignoreObjectIndex);
     Image ImageRayCasting();
     vec4 GetColor(Ray ray, Hit hit, int depth);
     vec3 calcDiffuseColor(Hit hit, Light* light);
