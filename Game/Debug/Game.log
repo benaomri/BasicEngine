@@ -11,21 +11,21 @@
      1>c:\dev\enginevideogames\game\inputmanager.h(63): warning C4305: 'argument' : truncation from 'double' to 'float'
          Generating Code...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Dev\EngineVideoGames\Debug\Game.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Dev\EngineVideoGames\res/libs glew32s.lib glfw3.lib opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Dev\EngineVideoGames\Debug\Game.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Dev\EngineVideoGames\Debug\Game.lib" /MACHINE:X86 Debug\game.obj
-         Debug\main.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Dev\EngineVideoGames\Debug\Game.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Dev\EngineVideoGames\res/libs glew32s.lib glfw3.lib opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Dev\EngineVideoGames\Debug\Game.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Dev\EngineVideoGames\Debug\Game.lib" /MACHINE:X86 Debug\game.object
+         Debug\main.object
          C:\Dev\EngineVideoGames\Debug\DisplayGLFW.lib
          C:\Dev\EngineVideoGames\bin\Debug\EngineVideoGames\EngineVideoGames.lib
      1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-     1>MSVCRTD.lib(cinitexe.obj) : warning LNK4098: defaultlib 'libcmt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
-     1>EngineVideoGames.lib(DrawBuffer.obj) : warning LNK4049: locally defined symbol ___glewBindFramebuffer imported
-     1>EngineVideoGames.lib(DrawBuffer.obj) : warning LNK4049: locally defined symbol ___glewBindRenderbuffer imported
-     1>EngineVideoGames.lib(DrawBuffer.obj) : warning LNK4049: locally defined symbol ___glewDeleteFramebuffers imported
-     1>EngineVideoGames.lib(DrawBuffer.obj) : warning LNK4049: locally defined symbol ___glewDeleteRenderbuffers imported
-     1>EngineVideoGames.lib(DrawBuffer.obj) : warning LNK4049: locally defined symbol ___glewFramebufferRenderbuffer imported
-     1>EngineVideoGames.lib(DrawBuffer.obj) : warning LNK4049: locally defined symbol ___glewGenFramebuffers imported
-     1>EngineVideoGames.lib(DrawBuffer.obj) : warning LNK4049: locally defined symbol ___glewGenRenderbuffers imported
-     1>EngineVideoGames.lib(DrawBuffer.obj) : warning LNK4049: locally defined symbol ___glewRenderbufferStorage imported
-     1>glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Dev\EngineVideoGames\Debug\vc100.pdb'; linking object as if no debug info
+     1>MSVCRTD.lib(cinitexe.object) : warning LNK4098: defaultlib 'libcmt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
+     1>EngineVideoGames.lib(DrawBuffer.object) : warning LNK4049: locally defined symbol ___glewBindFramebuffer imported
+     1>EngineVideoGames.lib(DrawBuffer.object) : warning LNK4049: locally defined symbol ___glewBindRenderbuffer imported
+     1>EngineVideoGames.lib(DrawBuffer.object) : warning LNK4049: locally defined symbol ___glewDeleteFramebuffers imported
+     1>EngineVideoGames.lib(DrawBuffer.object) : warning LNK4049: locally defined symbol ___glewDeleteRenderbuffers imported
+     1>EngineVideoGames.lib(DrawBuffer.object) : warning LNK4049: locally defined symbol ___glewFramebufferRenderbuffer imported
+     1>EngineVideoGames.lib(DrawBuffer.object) : warning LNK4049: locally defined symbol ___glewGenFramebuffers imported
+     1>EngineVideoGames.lib(DrawBuffer.object) : warning LNK4049: locally defined symbol ___glewGenRenderbuffers imported
+     1>EngineVideoGames.lib(DrawBuffer.object) : warning LNK4049: locally defined symbol ___glewRenderbufferStorage imported
+     1>glew32s.lib(glew.object) : warning LNK4099: PDB 'vc100.pdb' was not found with 'glew32s.lib(glew.object)' or at 'C:\Dev\EngineVideoGames\Debug\vc100.pdb'; linking object as if no debug info
          Game.vcxproj -> C:\Dev\EngineVideoGames\Debug\Game.exe
      1>Done Building Project "C:\Dev\EngineVideoGames\Game\Game.vcxproj" (Build target(s)).
 

@@ -1,6 +1,6 @@
 #ifndef CAMERA_INCLUDED_H
 #define CAMERA_INCLUDED_H
-//#include <glm/glm.hpp>
+
 #include "MovableGLM.h"
 
 class Camera : public MovableGLM
