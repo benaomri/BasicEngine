@@ -8,11 +8,11 @@
 class Plane : public Object{
 
 public:
-    Plane(vec4 details, objectType type);
+    Plane(vec4 details, objectTypes type);
     vec3 normal();
-    float d();
+    float distance();
     float FindIntersection(Ray ray);
-    vec3 getColor(vec3 hitPoint);
+    vec3 getObjectColor(vec3 hitPoint);
     vec3 getNormal(vec3 hitPoint);
 };
 

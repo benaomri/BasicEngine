@@ -1,6 +1,3 @@
-//
-// Created by noamm on 13/12/2022.
-//
 
 #ifndef GAME_RAY_H
 #define GAME_RAY_H

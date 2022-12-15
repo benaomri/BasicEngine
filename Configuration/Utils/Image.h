@@ -12,7 +12,6 @@ public:
 
     void setColor(int pixelX, int pixelY, vec4 rgba);
 
-    unsigned char* getData();
 
 };
 

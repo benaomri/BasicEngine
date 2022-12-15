@@ -1,8 +1,8 @@
 #include "Object.h"
 
-void Object::setColor(vec4 color) {
-    this->rgbColor = vec3(color.r, color.g, color.b);
-    this->shiness = color.a;
+void Object::setObjectColor(vec4 color) {
+    this->objectColorRGB = vec3(color.r, color.g, color.b);
+    this->objectShiness = color.a;
 }
 
 float vectorSize(vec3 vec) {

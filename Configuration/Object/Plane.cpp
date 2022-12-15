@@ -1,21 +1,21 @@
 #include "Plane.h"
 
 
-Plane::Plane(vec4 details, objectType type) {
-    this->details = details;
-    this->type = type;
+Plane::Plane(vec4 details, objectTypes type) {
+    this->objectDetails = details;
+    this->objectType = type;
 }
 
 vec3 Plane::normal() {
     return vec3(
-            details.x,
-            details.y,
-            details.z
+            objectDetails.x,
+            objectDetails.y,
+            objectDetails.z
     );
 }
 
-float Plane::d() {
-    return details.w;
+float Plane::distance() {
+    return objectDetails.w;
 }
 
 float Plane::FindIntersection(Ray ray) {
@@ -23,7 +23,7 @@ float Plane::FindIntersection(Ray ray) {
     float a = planeNormal.x;
     float b = planeNormal.y;
     float c = planeNormal.z;
-    float d = this->d();
+    float d = this->distance();
 
     float x0 = ray.position.x;
     float y0 = ray.position.y;
@@ -38,7 +38,7 @@ float Plane::FindIntersection(Ray ray) {
     return ans;
 }
 
-vec3 Plane::getColor(vec3 hitPoint) {
+vec3 Plane::getObjectColor(vec3 hitPoint) {
     float scalar = 0.5f;
     float checkers = 0;
     checkers += floor(((hitPoint.x < 0) ? (0.5 - hitPoint.x) : hitPoint.x) / scalar);
@@ -46,7 +46,7 @@ vec3 Plane::getColor(vec3 hitPoint) {
 
     checkers = (checkers * 0.5) - int(checkers * 0.5);
     checkers *= 2;
-    return (checkers > 0.5) ? 0.5f * this->rgbColor : this->rgbColor;
+    return (checkers > 0.5) ? 0.5f * this->objectColorRGB : this->objectColorRGB;
 }
 
 

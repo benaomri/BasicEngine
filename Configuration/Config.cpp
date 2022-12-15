@@ -91,8 +91,8 @@ void Config::readSceneFile(string fileName, int width, int height) {
 
     // Set objects colors
     for (int i = 0; i < objects.size(); i++) {
-        objects[i]->objIndex = i;
-        objects[i]->setColor(colors[i]);
+        objects[i]->objectIndex = i;
+        objects[i]->setObjectColor(colors[i]);
     }
 
     // Set spotlight positions
@@ -125,7 +125,7 @@ Image Config::ImageRayCasting() {
             // regular case
             if (bonusFlag < 0.5) {
                 Ray ray = ConstructRayThroughPixel(i, j, 0);
-                Hit hit = FindIntersection(ray, -1);
+                Hit hit = getHitIntersection(ray, -1);
                 pixelColor = GetColor(ray, hit, 0);
             }
             // Bonus
@@ -134,10 +134,10 @@ Image Config::ImageRayCasting() {
                 Ray ray2 = ConstructRayThroughPixel(i, j, 2);
                 Ray ray3 = ConstructRayThroughPixel(i, j, 3);
                 Ray ray4 = ConstructRayThroughPixel(i, j, 4);
-                Hit hit1 = FindIntersection(ray1, -1);
-                Hit hit2 = FindIntersection(ray2, -1);
-                Hit hit3 = FindIntersection(ray3, -1);
-                Hit hit4 = FindIntersection(ray4, -1);
+                Hit hit1 = getHitIntersection(ray1, -1);
+                Hit hit2 = getHitIntersection(ray2, -1);
+                Hit hit3 = getHitIntersection(ray3, -1);
+                Hit hit4 = getHitIntersection(ray4, -1);
                 vec4 pixel_color1 = GetColor(ray1, hit1, 0);
                 vec4 pixel_color2 = GetColor(ray2, hit2, 0);
                 vec4 pixel_color3 = GetColor(ray3, hit3, 0);
@@ -185,11 +185,11 @@ Ray Config::ConstructRayThroughPixel(int i, int j, int positionOnPixel) {
 }
 
 
-Hit Config::FindIntersection(Ray ray, int ignoreObjectIndex) {
+Hit Config::getHitIntersection(Ray ray, int ignoreObjectIndex) {
     float minT = INFINITY;
     Object *minPrimitive = new Plane(vec4(1.0, 1.0, 1.0, 1.0), Space);
-    minPrimitive->objIndex = -1;
-    minPrimitive->setColor(vec4(0.0, 0.0, 0.0, 0.0));
+    minPrimitive->objectIndex = -1;
+    minPrimitive->setObjectColor(vec4(0.0, 0.0, 0.0, 0.0));
     bool gotHit = false;
 
     for (int i = 0; i < objects.size(); i++) {
@@ -212,8 +212,8 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
     vec3 phongModelColor = vec3(0, 0, 0);
 
     // Regular case
-    if (hit.object->type == Regular) {
-        vec3 color = hit.object->getColor(hit.hitPoint);
+    if (hit.object->objectType == Regular) {
+        vec3 color = hit.object->getObjectColor(hit.hitPoint);
         phongModelColor = color * vec3(ambient.r, ambient.g, ambient.b); // Ambient
 
         // running over the light
@@ -229,7 +229,7 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
     }
 
     // Reflective case
-    if (hit.object->type == Reflective) {
+    if (hit.object->objectType == Reflective) {
         if (depth == 5) { // MAX_LEVEL=5
             return vec4(0.f, 0.f, 0.f, 0.f);
         }
@@ -237,9 +237,9 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
         vec3 reflection_ray_direction = ray.direction - 2.0f * hit.object->getNormal(hit.hitPoint) * dot(ray.direction, hit.object->getNormal(hit.hitPoint));
         Ray reflection_ray = Ray(reflection_ray_direction, hit.hitPoint);
 
-        Hit reflected_hit = FindIntersection(reflection_ray, hit.object->objIndex);
+        Hit reflected_hit = getHitIntersection(reflection_ray, hit.object->objectIndex);
 
-        if (reflected_hit.object->type == Space) {
+        if (reflected_hit.object->objectType == Space) {
             return vec4(0.f, 0.f, 0.f, 0.f);
         }
 
@@ -249,7 +249,7 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
     }
 
     // Transparent case
-    if (hit.object->type == Transparent) {
+    if (hit.object->objectType == Transparent) {
         if (depth == 5) {
             return vec4(0.f, 0.f, 0.f, 0.f);
         }
@@ -257,12 +257,12 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
         vec4 transparencyColor = vec4(0.f, 0.f, 0.f, 0.f);
 
         // Transparent Plane
-        if (hit.object->details.w < 0.0) {
+        if (hit.object->objectDetails.w < 0.0) {
             Ray rayThrough = Ray(ray.direction, hit.hitPoint);
 
-            Hit transparency_hit = FindIntersection(rayThrough, hit.object->objIndex);
+            Hit transparency_hit = getHitIntersection(rayThrough, hit.object->objectIndex);
 
-            if (transparency_hit.object->type == Space) {
+            if (transparency_hit.object->objectType == Space) {
                 return vec4(0.f, 0.f, 0.f, 0.f);
             }
 
@@ -286,10 +286,10 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
             rayDriection = normalizedVector(rayDriection);
             Ray rayIn = Ray(rayDriection, hit.hitPoint);
 
-            Hit transparencyHit = FindIntersection(rayIn, -1);
+            Hit transparencyHit = getHitIntersection(rayIn, -1);
 
             // Second hit inside the sphere to other object
-            if (transparencyHit.object->objIndex != hit.object->objIndex) {
+            if (transparencyHit.object->objectIndex != hit.object->objectIndex) {
                 transparencyColor = GetColor(rayIn, transparencyHit, depth + 1);
             }
                 // Second hit inside the sphere to outside
@@ -311,9 +311,9 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
                 rayOutDirection = normalizedVector(rayOutDirection);
                 Ray ray_out = Ray(rayOutDirection, secondHitPoint);
 
-                Hit transparencyHitOut = FindIntersection(ray_out, hit.object->objIndex);
+                Hit transparencyHitOut = getHitIntersection(ray_out, hit.object->objectIndex);
 
-                if (transparencyHitOut.object->type == Space) {
+                if (transparencyHitOut.object->objectType == Space) {
                     return vec4(0.f, 0.f, 0.f, 0.f);
                 }
 
@@ -333,7 +333,7 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
 vec3 Config::calcDiffuseColor(Hit hit, Light *light) {
     // Planes normals are in the opsite direction to the viewer than Spheres
 
-    float objectFactor = (hit.object->details.w < 0.0) ? -1 : 1;
+    float objectFactor = (hit.object->objectDetails.w < 0.0) ? -1 : 1;
     vec3 normalizedRayDirection = objectFactor * normalizedVector(light->lightDirection);
 
 
@@ -356,7 +356,7 @@ vec3 Config::calcDiffuseColor(Hit hit, Light *light) {
     float hitCosValue = dot(objectNormal, -normalizedRayDirection);
 
     // Id = Kd*(N^*L^)*Il
-    vec3 diffuse_color = hit.object->getColor(hit.hitPoint) * hitCosValue * light->lightRgbIntensity;
+    vec3 diffuse_color = hit.object->getObjectColor(hit.hitPoint) * hitCosValue * light->lightRgbIntensity;
     return diffuse_color;
 }
 
@@ -383,7 +383,7 @@ vec3 Config::calcSpecularColor(Ray ray, Hit hit, Light *light) {
     hitCosValue = glm::max(0.0f, hitCosValue);
 
     // (V^*R^)^n
-    hitCosValue = pow(hitCosValue, hit.object->shiness);
+    hitCosValue = pow(hitCosValue, hit.object->objectShiness);
 
     // Id = Ks*(V^*R^)^n*Il
     // Ks = (0.7, 0.7, 0.7)
@@ -411,7 +411,7 @@ float Config::calcShadowTerm(Hit hit, Light *light) {
 
     // Checking the path between the light source and the object by looping over all the objects
     for (int i = 0; i < objects.size(); i++) {
-        if (i != hit.object->objIndex) {
+        if (i != hit.object->objectIndex) {
             Ray ray = Ray(-normalizedRayDirection, hit.hitPoint);
             float t = objects[i]->FindIntersection(ray);
 
