@@ -16,18 +16,7 @@ float Sphere::radius() {
 float Sphere::FindIntersection(Ray ray) {
     //TODO check again before submit
     vec3 center = this->center();
-    float mx = center.x;
-    float my = center.y;
-    float mz = center.z;
     float radius = this->radius();
-
-    float x0 = ray.position.x;
-    float y0 = ray.position.y;
-    float z0 = ray.position.z;
-
-    float vecx = ray.direction.x;
-    float vecy = ray.direction.y;
-    float vecz = ray.direction.z;
 
     vec3 pointMinusCenterVec = ray.position - center;
 
