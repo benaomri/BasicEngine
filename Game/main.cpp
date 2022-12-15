@@ -1,21 +1,23 @@
-#include "InputManager.h"
-// #include "../DisplayGLFW/display.h"
+//#include "InputManager.h"
+#include "display.h"
 #include "game.h"
 #include "../res/includes/glm/glm.hpp"
 #include "../Configuration/Config.h"
 
 using namespace std;
 
+
 int main(int argc,char *argv[])
 {
-	const int DISPLAY_WIDTH = 800;
-	const int DISPLAY_HEIGHT = 800;
+	const int DISPLAY_WIDTH = 512;
+	const int DISPLAY_HEIGHT = 512;
 	const float CAMERA_ANGLE = 0.0f;
 	const float NEAR = 1.0f;
 	const float FAR = 100.0f;
+    int width, height, c;
 
 	Game *scn = new Game(CAMERA_ANGLE,(float)DISPLAY_WIDTH/DISPLAY_HEIGHT,NEAR,FAR);
-	
+
 	Display display(DISPLAY_WIDTH, DISPLAY_HEIGHT, "OpenGL");
 	
 	Init(display);
@@ -40,4 +42,5 @@ int main(int argc,char *argv[])
 	}
 	delete scn;
 	return 0;
+
 }

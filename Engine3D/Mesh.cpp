@@ -34,6 +34,7 @@ IndexedModel PlaneTriangles()
                     Vertex(glm::vec3(1, 1, 0), glm::vec2(1, 0), glm::vec3(0, 0, 1),glm::vec3(1, 1, 1)),
                     Vertex(glm::vec3(1, -1,0), glm::vec2(1, 1), glm::vec3(0, 0, 1),glm::vec3(1, 1, 1)),
             };
+
 	unsigned int indices[] =	{0, 1, 2,
 				0, 2, 3};
 	IndexedModel model;
