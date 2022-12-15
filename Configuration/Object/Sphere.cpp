@@ -1,8 +1,8 @@
 #include "Sphere.h"
 
-Sphere::Sphere(vec4 details, objectType objType) {
+Sphere::Sphere(vec4 details, objectType type) {
     this->details = details;
-    this->objType = objType;
+    this->type = type;
 }
 
 vec3 Sphere::center() {
@@ -14,6 +14,7 @@ float Sphere::radius() {
 }
 
 float Sphere::FindIntersection(Ray ray) {
+    //TODO check again before submit
     vec3 center = this->center();
     float mx = center.x;
     float my = center.y;
@@ -57,7 +58,7 @@ float Sphere::FindIntersection(Ray ray) {
 }
 
 vec3 Sphere::getColor(vec3 hitPoint) {
-    return this->rgb_color;
+    return this->rgbColor;
 }
 
 vec3 Sphere::getNormal(vec3 hitPoint) {

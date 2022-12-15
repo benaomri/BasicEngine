@@ -27,10 +27,10 @@ public:
     float calcShadowTerm(Hit hit, Light* light);
 
 
-    vector<vector<string>> scene_data;
+    vector<vector<string>> sceneData;
 
     vec3 eye;
-    float bonus_mode_flag;
+    float bonusFlag;
 
     vec4 ambient;
     vector<Object *> objects;
@@ -39,7 +39,7 @@ public:
     vector<vec4> positions;
     vector<vec4> intensities;
 
-    int image_width, image_height;
+    int imageWidth, imageHeight;
     float pixelWidth, pixelHeight;
 };
 

@@ -1,9 +1,9 @@
 #include "Plane.h"
 
 
-Plane::Plane(vec4 details, objectType objType) {
+Plane::Plane(vec4 details, objectType type) {
     this->details = details;
-    this->objType = objType;
+    this->type = type;
 }
 
 vec3 Plane::normal() {
@@ -46,7 +46,7 @@ vec3 Plane::getColor(vec3 hitPoint) {
 
     checkers = (checkers * 0.5) - int(checkers * 0.5);
     checkers *= 2;
-    return (checkers > 0.5) ? 0.5f * this->rgb_color : this->rgb_color;
+    return (checkers > 0.5) ? 0.5f * this->rgbColor : this->rgbColor;
 }
 
 

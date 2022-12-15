@@ -6,7 +6,7 @@
 class Sphere : public Object {
 
 public:
-    Sphere(vec4 details, objectType objType);
+    Sphere(vec4 details, objectType type);
     vec3 center();
     float radius();
     float FindIntersection(Ray ray);

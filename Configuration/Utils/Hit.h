@@ -10,9 +10,9 @@ using namespace glm;
 class Hit {
 
 public:
+    Hit(vec3 hitPoint, Object* object): hitPoint(hitPoint),object(object){};
     vec3 hitPoint;
-    Object* obj;
-    Hit(vec3 hitPoint, Object* obj);
+    Object* object;
 };
 
 

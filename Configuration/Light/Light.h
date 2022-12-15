@@ -16,7 +16,7 @@ public:
     vec3 direction;
     vec3 position;
     float cosAngle;
-    vec3 rgb_intensity;
+    vec3 rgbIntensity;
     float shiness;
     virtual void setIntensity(vec4 intensity);
 };

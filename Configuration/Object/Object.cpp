@@ -1,7 +1,7 @@
 #include "Object.h"
 
 void Object::setColor(vec4 color) {
-    this->rgb_color = vec3(color.r, color.g, color.b);
+    this->rgbColor = vec3(color.r, color.g, color.b);
     this->shiness = color.a;
 }
 

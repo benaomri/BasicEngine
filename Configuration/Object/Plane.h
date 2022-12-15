@@ -8,7 +8,7 @@
 class Plane : public Object{
 
 public:
-    Plane(vec4 details, objectType objType);
+    Plane(vec4 details, objectType type);
     vec3 normal();
     float d();
     float FindIntersection(Ray ray);

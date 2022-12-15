@@ -15,7 +15,7 @@ void Config::readSceneFile(string fileName, int width, int height) {
     string currentLine, currentArgInLine;
     vector<string> sceneLines;
     ifstream sceneFile(fileName);
-    bonus_mode_flag = 0.f;
+    bonusFlag = 0.f;
 
     while (getline(sceneFile, currentLine)) {
        stringstream textLineStream(currentLine);
@@ -25,23 +25,23 @@ void Config::readSceneFile(string fileName, int width, int height) {
             index = (index + 1) % 5;
 
             if (index == 4) {
-                scene_data.push_back(sceneLines);
+                sceneData.push_back(sceneLines);
                 sceneLines.clear();
             }
         }
     }
 
-    for (int i = 0; i < scene_data.size(); i++) {
-        vec4 dataVector = vec4(stof(scene_data[i][1]),
-                               stof(scene_data[i][2]),
-                               stof(scene_data[i][3]),
-                               stof(scene_data[i][4]));
+    for (int i = 0; i < sceneData.size(); i++) {
+        vec4 dataVector = vec4(stof(sceneData[i][1]),
+                               stof(sceneData[i][2]),
+                               stof(sceneData[i][3]),
+                               stof(sceneData[i][4]));
 
-        string lineType = scene_data[i][0];
+        string lineType = sceneData[i][0];
         // e = eye
         if ( lineType == "e") {
             eye = vec3(dataVector.x, dataVector.y, dataVector.z);
-            bonus_mode_flag = dataVector.w;
+            bonusFlag = dataVector.w;
         }
         // a = ambient
         if (lineType == "a")
@@ -109,21 +109,21 @@ void Config::readSceneFile(string fileName, int width, int height) {
 
     pixelWidth = 2.0 / float(width);
     pixelHeight = 2.0 / float(height);
-    image_width = width;
-    image_height = height;
+    imageWidth = width;
+    imageHeight = height;
 }
 
 
 Image Config::ImageRayCasting() {
-    Image image = Image(image_width, image_height);
+    Image image = Image(imageWidth, imageHeight);
 
     // running over the pixels
-    for (int j = 0; j < image_height; j++) {
-        for (int i = 0; i < image_width; i++) {
+    for (int j = 0; j < imageHeight; j++) {
+        for (int i = 0; i < imageWidth; i++) {
             vec4 pixelColor;
 
             // regular case
-            if (bonus_mode_flag < 0.5) {
+            if (bonusFlag < 0.5) {
                 Ray ray = ConstructRayThroughPixel(i, j, 0);
                 Hit hit = FindIntersection(ray, -1);
                 pixelColor = GetColor(ray, hit, 0);
@@ -193,7 +193,7 @@ Hit Config::FindIntersection(Ray ray, int ignoreObjectIndex) {
     bool gotHit = false;
 
     for (int i = 0; i < objects.size(); i++) {
-        if(i != ignoreObjectIndex){//Todo all the time -1
+        if(i != ignoreObjectIndex){
             float t = objects[i]->FindIntersection(ray);
             if ((t >= 0) && (t < minT)) {
                 gotHit = true;
@@ -212,8 +212,8 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
     vec3 phongModelColor = vec3(0, 0, 0);
 
     // Regular case
-    if (hit.obj->objType == Regular) {
-        vec3 color = hit.obj->getColor(hit.hitPoint);
+    if (hit.object->type == Regular) {
+        vec3 color = hit.object->getColor(hit.hitPoint);
         phongModelColor = color * vec3(ambient.r, ambient.g, ambient.b); // Ambient
 
         // running over the light
@@ -229,44 +229,40 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
     }
 
     // Reflective case
-    if (hit.obj->objType == Reflective) {
+    if (hit.object->type == Reflective) {
         if (depth == 5) { // MAX_LEVEL=5
             return vec4(0.f, 0.f, 0.f, 0.f);
         }
 
-        vec3 reflection_ray_direction = ray.direction - 2.0f * hit.obj->getNormal(hit.hitPoint) * dot(ray.direction, hit.obj->getNormal(hit.hitPoint));
+        vec3 reflection_ray_direction = ray.direction - 2.0f * hit.object->getNormal(hit.hitPoint) * dot(ray.direction, hit.object->getNormal(hit.hitPoint));
         Ray reflection_ray = Ray(reflection_ray_direction, hit.hitPoint);
 
-        Hit reflected_hit = FindIntersection(reflection_ray, hit.obj->objIndex);
+        Hit reflected_hit = FindIntersection(reflection_ray, hit.object->objIndex);
 
-        if (reflected_hit.obj->objType == Space) {
+        if (reflected_hit.object->type == Space) {
             return vec4(0.f, 0.f, 0.f, 0.f);
         }
 
         vec4 reflection_color = GetColor(reflection_ray, reflected_hit, depth + 1);
-
-        // The Correct, but less beautiful equation
-        //phongModelColor = 0.7f * vec3(reflection_color.r, reflection_color.g, reflection_color.b);
-
         phongModelColor = vec3(reflection_color.r, reflection_color.g, reflection_color.b);
         phongModelColor = min(phongModelColor, vec3(1.0, 1.0, 1.0));
     }
 
     // Transparent case
-    if (hit.obj->objType == Transparent) {
-        if (depth == 5) { // MAX_LEVEL=5
+    if (hit.object->type == Transparent) {
+        if (depth == 5) {
             return vec4(0.f, 0.f, 0.f, 0.f);
         }
 
         vec4 transparencyColor = vec4(0.f, 0.f, 0.f, 0.f);
 
         // Transparent Plane
-        if (hit.obj->details.w < 0.0) {
+        if (hit.object->details.w < 0.0) {
             Ray rayThrough = Ray(ray.direction, hit.hitPoint);
 
-            Hit transparency_hit = FindIntersection(rayThrough, hit.obj->objIndex);
+            Hit transparency_hit = FindIntersection(rayThrough, hit.object->objIndex);
 
-            if (transparency_hit.obj->objType == Space) {
+            if (transparency_hit.object->type == Space) {
                 return vec4(0.f, 0.f, 0.f, 0.f);
             }
 
@@ -278,7 +274,7 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
             float pi = 3.14159265;
             float snellFrac = (1.0f / 1.5f);
 
-            float cosFrom = dot(hit.obj->getNormal(hit.hitPoint), -ray.direction);
+            float cosFrom = dot(hit.object->getNormal(hit.hitPoint), -ray.direction);
             float thetaFrom = acos(cosFrom) * (180.0f / pi);
             float sinFrom = sin(thetaFrom * (pi / 180.0f));
             float sinTo = snellFrac * sinFrom;
@@ -286,23 +282,23 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
             float cosTo = cos(thetaTo * (pi / 180.0f));
 
             // Finding the second hit inside the sphere
-            vec3 rayDriection = (snellFrac * cosFrom - cosTo) * hit.obj->getNormal(hit.hitPoint) - snellFrac * (-ray.direction);
+            vec3 rayDriection = (snellFrac * cosFrom - cosTo) * hit.object->getNormal(hit.hitPoint) - snellFrac * (-ray.direction);
             rayDriection = normalizedVector(rayDriection);
             Ray rayIn = Ray(rayDriection, hit.hitPoint);
 
             Hit transparencyHit = FindIntersection(rayIn, -1);
 
             // Second hit inside the sphere to other object
-            if (transparencyHit.obj->objIndex != hit.obj->objIndex) {
+            if (transparencyHit.object->objIndex != hit.object->objIndex) {
                 transparencyColor = GetColor(rayIn, transparencyHit, depth + 1);
             }
                 // Second hit inside the sphere to outside
             else {
-                float t = hit.obj->FindIntersection(rayIn);
+                float t = hit.object->FindIntersection(rayIn);
                 vec3 secondHitPoint = rayIn.position + rayIn.direction * t;
 
                 // Reverse calculations
-                cosFrom = dot(-hit.obj->getNormal(secondHitPoint), -rayIn.direction);
+                cosFrom = dot(-hit.object->getNormal(secondHitPoint), -rayIn.direction);
                 thetaFrom = acos(cosFrom) * (180.0f / pi);
                 snellFrac = (1.5f / 1.0f);
                 sinFrom = sin(thetaFrom * (pi / 180.0f));
@@ -311,13 +307,13 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
                 cosTo = cos(thetaTo * (pi / 180.0f));
 
                 // Finding the ray out of the sphere
-                vec3 rayOutDirection = (snellFrac * cosFrom - cosTo) * -hit.obj->getNormal(hit.hitPoint) - snellFrac * (-rayIn.direction);
+                vec3 rayOutDirection = (snellFrac * cosFrom - cosTo) * -hit.object->getNormal(hit.hitPoint) - snellFrac * (-rayIn.direction);
                 rayOutDirection = normalizedVector(rayOutDirection);
                 Ray ray_out = Ray(rayOutDirection, secondHitPoint);
 
-                Hit transparencyHitOut = FindIntersection(ray_out, hit.obj->objIndex);
+                Hit transparencyHitOut = FindIntersection(ray_out, hit.object->objIndex);
 
-                if (transparencyHitOut.obj->objType == Space) {
+                if (transparencyHitOut.object->type == Space) {
                     return vec4(0.f, 0.f, 0.f, 0.f);
                 }
 
@@ -337,7 +333,7 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
 vec3 Config::calcDiffuseColor(Hit hit, Light *light) {
     // Planes normals are in the opsite direction to the viewer than Spheres
 
-    float objectFactor = (hit.obj->details.w < 0.0)? -1 : 1;
+    float objectFactor = (hit.object->details.w < 0.0) ? -1 : 1;
     vec3 normalizedRayDirection = objectFactor * normalizedVector(light->direction);
 
 
@@ -354,13 +350,13 @@ vec3 Config::calcDiffuseColor(Hit hit, Light *light) {
             normalizedRayDirection = objectFactor * virtualSpotlightRay;
         }
     }
-    vec3 objectNormal = hit.obj->getNormal(hit.hitPoint);
+    vec3 objectNormal = hit.object->getNormal(hit.hitPoint);
 
     // N^*L^ = cos(t)
     float hitCosValue = dot(objectNormal, -normalizedRayDirection);
 
     // Id = Kd*(N^*L^)*Il
-    vec3 diffuse_color = hit.obj->getColor(hit.hitPoint) * hitCosValue * light->rgb_intensity;
+    vec3 diffuse_color = hit.object->getColor(hit.hitPoint) * hitCosValue * light->rgbIntensity;
     return diffuse_color;
 }
 
@@ -378,7 +374,7 @@ vec3 Config::calcSpecularColor(Ray ray, Hit hit, Light *light) {
         }
         normalized_ray_direction = virtual_spotlight_ray;
     }
-    vec3 object_normal = hit.obj->getNormal(hit.hitPoint);
+    vec3 object_normal = hit.object->getNormal(hit.hitPoint);
     vec3 reflected_light_ray = normalized_ray_direction - 2.0f * object_normal * dot(normalized_ray_direction, object_normal);
     vec3 ray_to_viewer = normalizedVector(ray.position - hit.hitPoint);
 
@@ -387,11 +383,11 @@ vec3 Config::calcSpecularColor(Ray ray, Hit hit, Light *light) {
     hitCosValue = glm::max(0.0f, hitCosValue);
 
     // (V^*R^)^n
-    hitCosValue = pow(hitCosValue, hit.obj->shiness);
+    hitCosValue = pow(hitCosValue, hit.object->shiness);
 
     // Id = Ks*(V^*R^)^n*Il
     // Ks = (0.7, 0.7, 0.7)
-    vec3 specularColor = 0.7f * hitCosValue * light->rgb_intensity;
+    vec3 specularColor = 0.7f * hitCosValue * light->rgbIntensity;
     return specularColor;
 }
 
@@ -415,7 +411,7 @@ float Config::calcShadowTerm(Hit hit, Light *light) {
 
     // Checking the path between the light source and the object by looping over all the objects
     for (int i = 0; i < objects.size(); i++) {
-        if (i != hit.obj->objIndex) {
+        if (i != hit.object->objIndex) {
             Ray ray = Ray(-normalizedRayDirection, hit.hitPoint);
             float t = objects[i]->FindIntersection(ray);
 

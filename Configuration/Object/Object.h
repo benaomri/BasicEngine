@@ -13,9 +13,9 @@ enum objectType {
 };
 class Object {
 public:
-    objectType objType;
+    objectType type;
     vec4 details;
-    vec3 rgb_color;
+    vec3 rgbColor;
     float shiness;
     int objIndex;
 
