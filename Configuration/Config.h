@@ -6,7 +6,7 @@
 #include <vector>
 #include "Utils/Image.h"
 #include "Object/Object.h"
-#include "Utils/Light.h"
+#include "Light/Light.h"
 #include "glm/glm.hpp"
 #include "Utils/Hit.h"
 #include "Utils/Ray.h"

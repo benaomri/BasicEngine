@@ -28,7 +28,7 @@ add_library(Display ${DISPLAY})
 add_library(Engine ${ENGINE})
 
 
-add_executable(${PROJ_NAME} ${GAME} Configuration/Utils/Image.cpp Configuration/Utils/Image.h Configuration/Object/Object.cpp Configuration/Object/Object.h Configuration/Utils/Light.cpp Configuration/Utils/Light.h Configuration/Object/Sphere.cpp Configuration/Object/Sphere.h Configuration/Object/Plane.cpp Configuration/Object/Plane.h Configuration/Utils/SpotLight.cpp Configuration/Utils/SpotLight.h Configuration/Utils/DirectionalLight.cpp Configuration/Utils/DirectionalLight.h Configuration/Config.cpp Configuration/Config.h Configuration/Utils/Hit.cpp Configuration/Utils/Hit.h Configuration/Utils/Ray.cpp Configuration/Utils/Ray.h)
+add_executable(${PROJ_NAME} ${GAME} Configuration/Utils/Image.cpp Configuration/Utils/Image.h Configuration/Object/Object.cpp Configuration/Object/Object.h Configuration/Light/Light.cpp Configuration/Light/Light.h Configuration/Object/Sphere.cpp Configuration/Object/Sphere.h Configuration/Object/Plane.cpp Configuration/Object/Plane.h Configuration/Light/SpotLight.cpp Configuration/Light/SpotLight.h Configuration/Light/DirectionalLight.cpp Configuration/Light/DirectionalLight.h Configuration/Config.cpp Configuration/Config.h Configuration/Utils/Hit.cpp Configuration/Utils/Hit.h Configuration/Utils/Ray.cpp Configuration/Utils/Ray.h)
 if (APPLE)
     target_link_libraries(${PROJ_NAME} "-framework OpenGL")
 else()

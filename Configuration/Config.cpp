@@ -1,8 +1,8 @@
 #include "Config.h"
 #include "Object/Sphere.h"
 #include "Object/Plane.h"
-#include "Utils/SpotLight.h"
-#include "Utils/DirectionalLight.h"
+#include "Light/SpotLight.h"
+#include "Light/DirectionalLight.h"
 
 #include <iostream>
 #include <fstream>
@@ -123,7 +123,7 @@ Image Config::ImageRayCasting() {
         for (int i = 0; i < image_width; i++) {
             vec4 pixelColor;
 
-            //TODO drop Bonus cause we are laying for?
+            //TODO drop Bonus cause who we are laying for?
             // Single Sampling
             if (bonus_mode_flag < 0.5) {
                 Ray ray = ConstructRayThroughPixel(i, j, 0);
