@@ -273,24 +273,20 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
             float thetaTo = asin(sinTo) * (180.0f / pi);
             float cosTo = cos(thetaTo * (pi / 180.0f));
 
-            // Finding the second hit inside the sphere
-            vec3 rayDriection =
+            vec3 rayDirection =
                     (snellFrac * cosFrom - cosTo) * hit.object->getNormal(hit.hitPoint) - snellFrac * (-ray.direction);
-            rayDriection = normalizedVector(rayDriection);
-            Ray rayIn = Ray(rayDriection, hit.hitPoint);
+            rayDirection = normalizedVector(rayDirection);
+            Ray rayIn = Ray(rayDirection, hit.hitPoint);
 
             Hit transparencyHit = FindIntersection(rayIn, -1);
 
-            // Second hit inside the sphere to other object
             if (transparencyHit.object->objectIndex != hit.object->objectIndex) {
                 transparencyColor = GetColor(rayIn, transparencyHit, depth + 1);
             }
-                // Second hit inside the sphere to outside
             else {
                 float t = hit.object->FindIntersection(rayIn);
                 vec3 secondHitPoint = rayIn.position + rayIn.direction * t;
 
-                // Reverse calculations
                 cosFrom = dot(-hit.object->getNormal(secondHitPoint), -rayIn.direction);
                 thetaFrom = acos(cosFrom) * (180.0f / pi);
                 snellFrac = (1.5f / 1.0f);
@@ -299,7 +295,6 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
                 thetaTo = asin(sinTo) * (180.0f / pi);
                 cosTo = cos(thetaTo * (pi / 180.0f));
 
-                // Finding the ray out of the sphere
                 vec3 rayOutDirection = (snellFrac * cosFrom - cosTo) * -hit.object->getNormal(hit.hitPoint) -
                                        snellFrac * (-rayIn.direction);
                 rayOutDirection = normalizedVector(rayOutDirection);
@@ -333,9 +328,9 @@ vec3 Config::calcDiffuseColor(Hit hit, Light *light) {
         // Checks if the spotlight hit the object
         if (lightCosValue < light->lightCosAngle) {
             return vec3(0.f, 0.f, 0.f);
-        } else {
-            normalizedRayDirection = objectFactor * virtualSpotlightRay;
         }
+        normalizedRayDirection = objectFactor * virtualSpotlightRay;
+
     }
     vec3 objectNormal = hit.object->getNormal(hit.hitPoint);
 
