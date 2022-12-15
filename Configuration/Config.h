@@ -41,13 +41,6 @@ public:
 
     int image_width, image_height;
     float pixelWidth, pixelHeight;
-
-    vec3 forward_vector;
-    vec3 up_vector;
-    vec3 right_vector;
-    vec2 center_dot;
-
-
 };
 
 

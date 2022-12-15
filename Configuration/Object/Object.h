@@ -22,7 +22,6 @@ public:
     virtual float FindIntersection(Ray ray) = 0;
     virtual void setColor(vec4 color);
     virtual vec3 getColor(vec3 hitPoint) = 0;
-    virtual float getAngle(vec3 ray, vec3 hitPoint);
     virtual vec3 getNormal(vec3 hitPoint) = 0;
 };
 vec3 normalizedVector(vec3 vec);

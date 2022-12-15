@@ -5,9 +5,6 @@ void Object::setColor(vec4 color) {
     this->shiness = color.a;
 }
 
-float Object::getAngle(vec3 hitVec, vec3 normal) {
-    return (acos(dot(hitVec, normal)) - acos(.0)) / (4 * acos(.0)) * 360;
-}
 float vectorSize(vec3 vec) {
     return sqrt(powf(vec.x, 2.) + powf(vec.y, 2.) + powf(vec.z, 2.));
 }

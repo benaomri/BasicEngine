@@ -15,8 +15,8 @@ void Config::readSceneFile(string fileName, int width, int height) {
     string currentLine, currentArgInLine;
     vector<string> sceneLines;
     ifstream sceneFile(fileName);
+    bonus_mode_flag = 0.f;
 
-    // Use a while loop together with the getline() function to read the file line by line
     while (getline(sceneFile, currentLine)) {
        stringstream textLineStream(currentLine);
 
@@ -107,7 +107,6 @@ void Config::readSceneFile(string fileName, int width, int height) {
         lights[i]->setIntensity(intensities[i]);
     }
 
-    // Finding pixel width and height and saving parameters
     pixelWidth = 2.0 / float(width);
     pixelHeight = 2.0 / float(height);
     image_width = width;
@@ -118,19 +117,18 @@ void Config::readSceneFile(string fileName, int width, int height) {
 Image Config::ImageRayCasting() {
     Image image = Image(image_width, image_height);
 
-    // Looping over all the pixels
+    // running over the pixels
     for (int j = 0; j < image_height; j++) {
         for (int i = 0; i < image_width; i++) {
             vec4 pixelColor;
 
-            //TODO drop Bonus cause who we are laying for?
-            // Single Sampling
+            // regular case
             if (bonus_mode_flag < 0.5) {
                 Ray ray = ConstructRayThroughPixel(i, j, 0);
                 Hit hit = FindIntersection(ray, -1);
                 pixelColor = GetColor(ray, hit, 0);
             }
-                // Multi Sampling (Bonus)
+            // Bonus
             else {
                 Ray ray1 = ConstructRayThroughPixel(i, j, 1);
                 Ray ray2 = ConstructRayThroughPixel(i, j, 2);
@@ -155,8 +153,7 @@ Image Config::ImageRayCasting() {
 
 Ray Config::ConstructRayThroughPixel(int i, int j, int positionOnPixel) {
     vec3 topLeftPoint, hitVector, rayDirection;
-
-    // Pixel center hit
+    // center hit
     if (positionOnPixel == 0) {
         topLeftPoint = vec3(-1 + (pixelWidth / 2), 1 - (pixelHeight / 2), 0);
         hitVector = topLeftPoint + vec3(i * pixelWidth, -1 * (j * pixelHeight), 0);
@@ -219,7 +216,7 @@ vec4 Config::GetColor(Ray ray, Hit hit, int depth) {
         vec3 color = hit.obj->getColor(hit.hitPoint);
         phongModelColor = color * vec3(ambient.r, ambient.g, ambient.b); // Ambient
 
-        // Looping over all the light sources
+        // running over the light
         for (int i = 0; i < lights.size(); i++) {
             vec3 diffuseColor = max(calcDiffuseColor(hit, lights[i]), vec3(0, 0, 0)); // Diffuse
             vec3 specularColor = max(calcSpecularColor(ray, hit, lights[i]), vec3(0, 0, 0)); // Specular
@@ -379,9 +376,7 @@ vec3 Config::calcSpecularColor(Ray ray, Hit hit, Light *light) {
         if (light_cos_value < light->cosAngle) {
             return vec3(0.f, 0.f, 0.f);
         }
-        else {
-            normalized_ray_direction = virtual_spotlight_ray;
-        }
+        normalized_ray_direction = virtual_spotlight_ray;
     }
     vec3 object_normal = hit.obj->getNormal(hit.hitPoint);
     vec3 reflected_light_ray = normalized_ray_direction - 2.0f * object_normal * dot(normalized_ray_direction, object_normal);
@@ -396,8 +391,8 @@ vec3 Config::calcSpecularColor(Ray ray, Hit hit, Light *light) {
 
     // Id = Ks*(V^*R^)^n*Il
     // Ks = (0.7, 0.7, 0.7)
-    vec3 speculatColor = 0.7f * hitCosValue * light->rgb_intensity;
-    return speculatColor;
+    vec3 specularColor = 0.7f * hitCosValue * light->rgb_intensity;
+    return specularColor;
 }
 
 float Config::calcShadowTerm(Hit hit, Light *light) {
@@ -413,11 +408,9 @@ float Config::calcShadowTerm(Hit hit, Light *light) {
         if (lightCosValue < light->cosAngle) {
             return 0.0;
         }
-        else {
-            normalizedRayDirection = virtualSpotlightRay;
-            // Update minT to the value of the light position
-            minT = -(dot(hit.hitPoint, light->position)) / abs(dot(-normalizedRayDirection, light->position));
-        }
+        normalizedRayDirection = virtualSpotlightRay;
+        // Update minT to the value of the light position
+        minT = -(dot(hit.hitPoint, light->position)) / abs(dot(-normalizedRayDirection, light->position));
     }
 
     // Checking the path between the light source and the object by looping over all the objects

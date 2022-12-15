@@ -60,11 +60,6 @@ vec3 Sphere::getColor(vec3 hitPoint) {
     return this->rgb_color;
 }
 
-float Sphere::getAngle(vec3 ray, vec3 hitPoint) {
-    vec3 normalToTheSphere = getNormal(hitPoint);
-    return Object::getAngle(ray, normalToTheSphere);
-}
-
 vec3 Sphere::getNormal(vec3 hitPoint) {
     return normalizedVector(hitPoint - center());
 }

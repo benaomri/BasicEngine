@@ -23,7 +23,7 @@ int main(int argc,char *argv[])
 	scn->Init();
 
 	display.SetScene(scn);
-    string fileName = "../scenes/scene5.txt";
+    string fileName = "../scene4.txt";
 
     Config sceneConfigure = Config();
     sceneConfigure.readSceneFile(fileName, DISPLAY_WIDTH, DISPLAY_HEIGHT);

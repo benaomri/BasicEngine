@@ -13,7 +13,6 @@ public:
     float d();
     float FindIntersection(Ray ray);
     vec3 getColor(vec3 hitPoint);
-    float getAngle(vec3 ray, vec3 hitPoint);
     vec3 getNormal(vec3 hitPoint);
 };
 

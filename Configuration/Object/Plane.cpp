@@ -49,10 +49,6 @@ vec3 Plane::getColor(vec3 hitPoint) {
     return (checkers > 0.5) ? 0.5f * this->rgb_color : this->rgb_color;
 }
 
-float Plane::getAngle(vec3 ray, vec3 hitPoint) {
-    vec3 normalToThePlane = getNormal(hitPoint);
-    return Object::getAngle(ray, normalToThePlane);
-}
 
 vec3 Plane::getNormal(vec3 hitPoint) {
     return normalizedVector(normal());
