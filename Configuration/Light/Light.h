@@ -5,20 +5,20 @@
 
 using namespace glm;
 
-enum lightType {
+enum lightTypes {
     Directional,
     Spot
 };
 
 class Light {
 public:
-    lightType lightType;
-    vec3 direction;
-    vec3 position;
-    float cosAngle;
-    vec3 rgbIntensity;
-    float shiness;
-    virtual void setIntensity(vec4 intensity);
+    lightTypes lightType;
+    vec3 lightDirection;
+    vec3 lightPosition;
+    float lightCosAngle;
+    vec3 lightRgbIntensity;
+    float lightShiness;
+    virtual void setIntensity(vec4 lightIntensity);
 };
 
 #endif //GAME_LIGHT_H

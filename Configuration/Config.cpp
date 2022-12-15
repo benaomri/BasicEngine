@@ -101,8 +101,8 @@ void Config::readSceneFile(string fileName, int width, int height) {
         if (lights[i]->lightType == Spot) {
             vec3 point = vec3(positions[j].x, positions[j].y, positions[j].z);
             float cosAngle = positions[j++].w;
-            lights[i]->position = point;
-            lights[i]->cosAngle = cosAngle;
+            lights[i]->lightPosition = point;
+            lights[i]->lightCosAngle = cosAngle;
         }
         lights[i]->setIntensity(intensities[i]);
     }
@@ -334,16 +334,16 @@ vec3 Config::calcDiffuseColor(Hit hit, Light *light) {
     // Planes normals are in the opsite direction to the viewer than Spheres
 
     float objectFactor = (hit.object->details.w < 0.0) ? -1 : 1;
-    vec3 normalizedRayDirection = objectFactor * normalizedVector(light->direction);
+    vec3 normalizedRayDirection = objectFactor * normalizedVector(light->lightDirection);
 
 
     // Spotlight special case
     if (light->lightType == Spot) {
-        vec3 virtualSpotlightRay = normalizedVector(hit.hitPoint - light->position);
+        vec3 virtualSpotlightRay = normalizedVector(hit.hitPoint - light->lightPosition);
         float lightCosValue = dot(virtualSpotlightRay, objectFactor * normalizedRayDirection);
 
         // Checking if the spotlight rays hit the object
-        if (lightCosValue < light->cosAngle) {
+        if (lightCosValue < light->lightCosAngle) {
             return vec3(0.f, 0.f, 0.f);
         }
         else {
@@ -356,20 +356,20 @@ vec3 Config::calcDiffuseColor(Hit hit, Light *light) {
     float hitCosValue = dot(objectNormal, -normalizedRayDirection);
 
     // Id = Kd*(N^*L^)*Il
-    vec3 diffuse_color = hit.object->getColor(hit.hitPoint) * hitCosValue * light->rgbIntensity;
+    vec3 diffuse_color = hit.object->getColor(hit.hitPoint) * hitCosValue * light->lightRgbIntensity;
     return diffuse_color;
 }
 
 vec3 Config::calcSpecularColor(Ray ray, Hit hit, Light *light) {
-    vec3 normalized_ray_direction = normalizedVector(light->direction);
+    vec3 normalized_ray_direction = normalizedVector(light->lightDirection);
 
     // Spotlight special case
     if (light->lightType == Spot) {
-        vec3 virtual_spotlight_ray = normalizedVector(hit.hitPoint - light->position);
+        vec3 virtual_spotlight_ray = normalizedVector(hit.hitPoint - light->lightPosition);
         float light_cos_value = dot(virtual_spotlight_ray, normalized_ray_direction);
 
         // Checking if the spotlight rays hit the object
-        if (light_cos_value < light->cosAngle) {
+        if (light_cos_value < light->lightCosAngle) {
             return vec3(0.f, 0.f, 0.f);
         }
         normalized_ray_direction = virtual_spotlight_ray;
@@ -387,26 +387,26 @@ vec3 Config::calcSpecularColor(Ray ray, Hit hit, Light *light) {
 
     // Id = Ks*(V^*R^)^n*Il
     // Ks = (0.7, 0.7, 0.7)
-    vec3 specularColor = 0.7f * hitCosValue * light->rgbIntensity;
+    vec3 specularColor = 0.7f * hitCosValue * light->lightRgbIntensity;
     return specularColor;
 }
 
 float Config::calcShadowTerm(Hit hit, Light *light) {
-    vec3 normalizedRayDirection = normalizedVector(light->direction);
+    vec3 normalizedRayDirection = normalizedVector(light->lightDirection);
     float minT = INFINITY;
 
     // Spotlight special case
     if (light->lightType == Spot) {
-        vec3 virtualSpotlightRay = normalizedVector(hit.hitPoint - light->position);
+        vec3 virtualSpotlightRay = normalizedVector(hit.hitPoint - light->lightPosition);
         float lightCosValue = dot(virtualSpotlightRay, normalizedRayDirection);
 
         // Checking if the spotlight rays hit the object
-        if (lightCosValue < light->cosAngle) {
+        if (lightCosValue < light->lightCosAngle) {
             return 0.0;
         }
         normalizedRayDirection = virtualSpotlightRay;
         // Update minT to the value of the light position
-        minT = -(dot(hit.hitPoint, light->position)) / abs(dot(-normalizedRayDirection, light->position));
+        minT = -(dot(hit.hitPoint, light->lightPosition)) / abs(dot(-normalizedRayDirection, light->lightPosition));
     }
 
     // Checking the path between the light source and the object by looping over all the objects

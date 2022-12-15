@@ -5,7 +5,7 @@
 
 class SpotLight : public Light {
 public:
-    SpotLight(vec3 direction);
+    SpotLight(vec3 lightDirection);
 };
 
 #endif //GAME_SPOTLIGHT_H

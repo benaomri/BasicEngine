@@ -5,7 +5,7 @@
 
 class DirectionalLight : public Light{
 public:
-    DirectionalLight(vec3 direction);
+    DirectionalLight(vec3 lightDirection);
 };
 
 

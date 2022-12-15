@@ -1,6 +1,6 @@
 #include "Light.h"
 
-void Light::setIntensity(vec4 intensity) {
-    this->rgbIntensity = vec3(intensity.r, intensity.g, intensity.b);
-    this->shiness = intensity.a;
+void Light::setIntensity(vec4 lightIntensity) {
+    this->lightRgbIntensity = vec3(lightIntensity.r, lightIntensity.g, lightIntensity.b);
+    this->lightShiness = lightIntensity.a;
 }
