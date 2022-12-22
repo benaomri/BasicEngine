@@ -1,9 +1,9 @@
 #pragma once   //maybe should be static class
 #include "display.h"
 #include "game.h"
+#include "Configuration/GPTCube.h"
 
-
-	void mouse_callback(GLFWwindow* window,int button, int action, int mods)
+void mouse_callback(GLFWwindow* window,int button, int action, int mods)
 	{	
 		if(action == GLFW_PRESS )
 		{
@@ -24,7 +24,6 @@
 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		Game *scn = (Game*)glfwGetWindowUserPointer(window);
-
 		if(action == GLFW_PRESS || action == GLFW_REPEAT)
 		{
 			switch (key)
@@ -40,7 +39,7 @@
 				break;
 
 				case GLFW_KEY_UP:
-					scn->MoveCamera(0,scn->zTranslate,0.4f);
+                    scn->gptCube.MoveUp();
 					break;
 				case GLFW_KEY_DOWN:
 					//scn->shapeTransformation(scn->xGlobalRotate,-5.f);

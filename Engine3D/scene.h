@@ -61,8 +61,8 @@ public:
 	bool inline IsActive() const { return isActive;} 
 	
 	inline void SetShapeTex(int shpIndx,int texIndx){shapes[shpIndx]->SetTexture(texIndx);} 
-	inline void SetShapeShader(int shpIndx,int shdrIndx){shapes[shpIndx]->SetShader(shdrIndx);} 
-	
+	inline void SetShapeShader(int shpIndx,int shdrIndx){shapes[shpIndx]->SetShader(shdrIndx);}
+    std::vector<Shape*>* getShapes() { return &shapes; }
 private:	
 	
 	std::vector<Camera*> cameras; 

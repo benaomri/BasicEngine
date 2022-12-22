@@ -1,5 +1,6 @@
 #pragma once
 #include "scene.h"
+#include "Configuration/GPTCube.h"
 
 class Game : public Scene
 {
@@ -14,5 +15,8 @@ public:
 	void WhenTranslate();
 	void Motion();
 	~Game(void);
+
+    int cubeSize;
+    GPTCube gptCube;
 };
 
