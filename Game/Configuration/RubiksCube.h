@@ -1,7 +1,7 @@
 
 
-#ifndef GAME_GPTCUBE_H
-#define GAME_GPTCUBE_H
+#ifndef GAME_RUBIKSCUBE_H
+#define GAME_RUBIKSCUBE_H
 
 #include "glm/vec4.hpp"
 #include "scene.h"
@@ -13,9 +13,9 @@
 #define  ROTATION_SPEED = 10.0f
 
 
-class GPTCube {
+class RubiksCube {
 public:
-    GPTCube();
+    RubiksCube();
     void initCubePositions(Scene *scn);
     glm::vec4*  getCubeAngels();
 
@@ -29,12 +29,12 @@ public:
 
 
 
-    std::vector<Shape *> *scn_shapes;
-    glm::vec3 current_center;
-    int clock_direction;
-    int rotation_angle;
+    std::vector<Shape *> *scnShapes;
+    glm::vec3 currentCenter;
+    int clockDirection;
+    int rotationAngle;
 
 };
 
 
-#endif //GAME_GPTCUBE_H
+#endif //GAME_RUBIKSCUBE_H

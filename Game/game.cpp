@@ -1,5 +1,5 @@
 #include "game.h"
-#include "Configuration/GPTCube.h"
+#include "Configuration/RubiksCube.h"
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -34,7 +34,7 @@ void Game::Init() {
     pickedShape = -1;
 //    rubikCube = RubikCube();
 //    rubikCube.Create_Cube(this, cubeSize);
-    gptCube = GPTCube();
+    gptCube = RubiksCube();
     gptCube.initCubePositions(this);
     //ReadPixel(); //uncomment when you are reading from the z-buffer
 }

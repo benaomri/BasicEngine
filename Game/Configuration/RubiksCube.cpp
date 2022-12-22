@@ -1,13 +1,13 @@
 
-#include "GPTCube.h"
+#include "RubiksCube.h"
 
 using namespace std;
 
-GPTCube::GPTCube() {}
+RubiksCube::RubiksCube() {}
 
-void GPTCube::initCubePositions(Scene *scn)
+void RubiksCube::initCubePositions(Scene *scn)
 {
-    scn_shapes = scn->getShapes();
+    scnShapes = scn->getShapes();
     scn->AddTexture("../res/textures/plane.png", false);
 
     // initialize the positions and indices of the cube faces
@@ -32,21 +32,21 @@ void GPTCube::initCubePositions(Scene *scn)
                 scn->AddShape(Scene::Cube, -1, Scene::TRIANGLES);
                 scn->SetShapeTex(index, 0);
 
-                (*scn_shapes)[index]->MyTranslate(glm::vec3(x-DELTA, y-DELTA, z-DELTA), 0);
-                (*scn_shapes)[index]->MyScale(glm::vec3(0.5, 0.5, 0.5));
+                (*scnShapes)[index]->MyTranslate(glm::vec3(x - DELTA, y - DELTA, z - DELTA), 0);
+                (*scnShapes)[index]->MyScale(glm::vec3(0.5, 0.5, 0.5));
 
             }
         }
     }
 
     scn->MoveCamera(0, Scene::zTranslate, 15);
-    current_center = glm::vec3(1, 1, 1);
-    clock_direction = 1;
-    rotation_angle = 90;
+    currentCenter = glm::vec3(1, 1, 1);
+    clockDirection = 1;
+    rotationAngle = 90;
 
 }
 
-void  GPTCube::MoveUp() {
+void  RubiksCube::MoveUp() {
     cout<< "up"<< endl;
     for (int x = 0; x < NUM_CUBES; x++)
     {

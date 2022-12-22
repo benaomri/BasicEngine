@@ -1,6 +1,6 @@
 #pragma once
 #include "scene.h"
-#include "Configuration/GPTCube.h"
+#include "Configuration/RubiksCube.h"
 
 class Game : public Scene
 {
@@ -17,6 +17,6 @@ public:
 	~Game(void);
 
     int cubeSize;
-    GPTCube gptCube;
+    RubiksCube gptCube;
 };
 
