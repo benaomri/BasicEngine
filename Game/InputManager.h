@@ -46,7 +46,8 @@ void mouse_callback(GLFWwindow* window,int button, int action, int mods)
 					//cout<< "down: "<<endl;
 					scn->MoveCamera(0,scn->zTranslate,-0.4f);
 					break;
-
+                case GLFW_KEY_R:
+                    scn->gptCube.MoveR();
 			default:
 				break;
 			}

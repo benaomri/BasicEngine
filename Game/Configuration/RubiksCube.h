@@ -17,10 +17,21 @@ class RubiksCube {
 public:
     RubiksCube();
     void initCubePositions(Scene *scn);
-    glm::vec4*  getCubeAngels();
-
+    glm::vec4 angleModulo(glm::vec4 currentAngle);
     void  MoveUp();
-
+    void MoveR();
+    void MoveL();
+    void MoveU();
+    void MoveD();
+    void MoveB();
+    void MoveF();
+    void MoveSPACE();
+    void MoveZ();
+    void MoveUP();
+    void MoveDOWN();
+    void MoveLEFT();
+    void MoveRIGHT();
+    void MoveM();
 
     // 3D array for storing the positions and indices of the cube faces
     glm::vec4 cubePositions[NUM_CUBES][NUM_CUBES][NUM_CUBES];
