@@ -31,43 +31,43 @@ void mouse_callback(GLFWwindow* window,int button, int action, int mods)
 					glfwSetWindowShouldClose(window,GLFW_TRUE);
 				    break;
 				case GLFW_KEY_SPACE:
-					scn->gptCube.MoveSPACE();
+					scn->rubiksCube.MoveSPACE();
                     break;
                 case GLFW_KEY_R:
-                    scn->gptCube.MoveR();
+                    scn->rubiksCube.MoveR();
                     break;
                 case GLFW_KEY_L:
-                    scn->gptCube.MoveL();
+                    scn->rubiksCube.MoveL();
                     break;
                 case GLFW_KEY_U:
-                    scn->gptCube.MoveU();
+                    scn->rubiksCube.MoveU();
                     break;
                 case GLFW_KEY_D:
-                    scn->gptCube.MoveD();
+                    scn->rubiksCube.MoveD();
                     break;
                 case GLFW_KEY_B:
-                    scn->gptCube.MoveB();
+                    scn->rubiksCube.MoveB();
                     break;
                 case GLFW_KEY_F:
-                    scn->gptCube.MoveF();
+                    scn->rubiksCube.MoveF();
                     break;
                 case GLFW_KEY_UP:
-                    scn->gptCube.MoveUP();
+                    scn->rubiksCube.MoveUP();
                     break;
                 case GLFW_KEY_DOWN:
-                    scn->gptCube.MoveDOWN();
+                    scn->rubiksCube.MoveDOWN();
                     break;
                 case GLFW_KEY_RIGHT:
-                    scn->gptCube.MoveRIGHT();
+                    scn->rubiksCube.MoveRIGHT();
                     break;
                 case GLFW_KEY_LEFT:
-                    scn->gptCube.MoveLEFT();
+                    scn->rubiksCube.MoveLEFT();
                     break;
                 case GLFW_KEY_Z:
-                    scn->gptCube.MoveZ();
+                    scn->rubiksCube.MoveZ();
                     break;
                 case GLFW_KEY_A:
-                    scn->gptCube.MoveA();
+                    scn->rubiksCube.MoveA();
                     break;
 			default:
 				break;

@@ -17,6 +17,6 @@ public:
 	~Game(void);
 
     int cubeSize;
-    RubiksCube gptCube;
+    RubiksCube rubiksCube;
 };
 

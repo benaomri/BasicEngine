@@ -101,7 +101,7 @@ void RubiksCube::MoveU()
 {
     int j = currentCenter.y + 1;
 
-    if (j == -1) {
+    if (j == NUM_CUBES) {
         std::cout << "Invalid rotation" << std::endl;
         return;
     }
@@ -161,7 +161,7 @@ void RubiksCube::MoveF()
 {
     int k = currentCenter.z + 1;
 
-    if (k == -1) {
+    if (k == NUM_CUBES) {
         std::cout << "Invalid rotation" << std::endl;
         return;
     }

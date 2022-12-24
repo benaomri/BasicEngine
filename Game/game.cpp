@@ -34,8 +34,8 @@ void Game::Init() {
     pickedShape = -1;
 //    rubikCube = RubikCube();
 //    rubikCube.Create_Cube(this, cubeSize);
-    gptCube = RubiksCube();
-    gptCube.initCubePositions(this);
+    rubiksCube = RubiksCube();
+    rubiksCube.initCubePositions(this);
     //ReadPixel(); //uncomment when you are reading from the z-buffer
 }
 
