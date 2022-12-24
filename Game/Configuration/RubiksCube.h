@@ -6,6 +6,8 @@
 #include "glm/vec4.hpp"
 #include "scene.h"
 #include <iostream>
+#include <glm/gtc/matrix_transform.hpp>
+
 
 #define CUBE_SIZE 1.0
 #define NUM_CUBES 3
@@ -32,6 +34,8 @@ public:
     void MoveLEFT();
     void MoveRIGHT();
     void MoveM();
+    void updateStructure(glm::vec3 newPosition);
+
 
     // 3D array for storing the positions and indices of the cube faces
     glm::vec4 cubePositions[NUM_CUBES][NUM_CUBES][NUM_CUBES];

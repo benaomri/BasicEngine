@@ -48,6 +48,13 @@ void mouse_callback(GLFWwindow* window,int button, int action, int mods)
 					break;
                 case GLFW_KEY_R:
                     scn->gptCube.MoveR();
+                    break;
+                case GLFW_KEY_L:
+                    scn->gptCube.MoveL();
+                    break;
+                case GLFW_KEY_U:
+                    scn->gptCube.MoveU();
+                    break;
 			default:
 				break;
 			}
