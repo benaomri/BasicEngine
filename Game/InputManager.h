@@ -17,8 +17,7 @@ void mouse_callback(GLFWwindow* window,int button, int action, int mods)
 	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	{
 		Game *scn = (Game*)glfwGetWindowUserPointer(window);
-		scn->MyTranslate(glm::vec3(0,0,xoffset),0);
-		
+        scn->MyTranslate(glm::vec3(0, 0, yoffset), 0);
 	}
 	
 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -30,13 +29,10 @@ void mouse_callback(GLFWwindow* window,int button, int action, int mods)
 			{
 				case GLFW_KEY_ESCAPE:			
 					glfwSetWindowShouldClose(window,GLFW_TRUE);
-				break;
+				    break;
 				case GLFW_KEY_SPACE:
-					if(scn->IsActive())
-						scn->Deactivate();
-					else
-						scn->Activate();
-				break;
+					scn->gptCube.MoveSPACE();
+                    break;
                 case GLFW_KEY_R:
                     scn->gptCube.MoveR();
                     break;
@@ -56,7 +52,7 @@ void mouse_callback(GLFWwindow* window,int button, int action, int mods)
                     scn->gptCube.MoveF();
                     break;
                 case GLFW_KEY_UP:
-                    scn->gptCube.MoveUp();
+                    scn->gptCube.MoveUP();
                     break;
                 case GLFW_KEY_DOWN:
                     scn->gptCube.MoveDOWN();
@@ -66,6 +62,12 @@ void mouse_callback(GLFWwindow* window,int button, int action, int mods)
                     break;
                 case GLFW_KEY_LEFT:
                     scn->gptCube.MoveLEFT();
+                    break;
+                case GLFW_KEY_Z:
+                    scn->gptCube.MoveZ();
+                    break;
+                case GLFW_KEY_A:
+                    scn->gptCube.MoveA();
                     break;
 			default:
 				break;

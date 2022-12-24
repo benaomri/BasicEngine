@@ -177,7 +177,10 @@ void RubiksCube::MoveF()
     updateStructure();
 }
 
-void RubiksCube::MoveSPACE() {clockDirection *= -1;}
+void RubiksCube::MoveSPACE()
+{
+    clockDirection *= -1;
+}
 
 void RubiksCube::MoveZ()
 {
@@ -199,7 +202,7 @@ void RubiksCube::MoveA()
     }
 }
 
-void RubiksCube::MoveUp()
+void RubiksCube::MoveUP()
 {
     if (currentCenter.y < NUM_CUBES - 1) {
         currentCenter += glm::vec3(0, 1, 0);
