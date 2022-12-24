@@ -52,13 +52,13 @@ public:
     int clockDirection;
     int rotationAngle;
 
-    int rotation_per_frame;
-
-    bool unlocked;
-    bool activate_animation;
-    bool animating;
-    char action;
-    int num_of_actions;
+//    int rotation_per_frame;
+//
+//    bool unlocked;
+//    bool activate_animation;
+//    bool animating;
+//    char action;
+//    int num_of_actions;
 
 };
 

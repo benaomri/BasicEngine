@@ -46,11 +46,6 @@ void RubiksCube::initCubePositions(Scene *scn) {
     clockDirection = 1;
     rotationAngle = 90;
 
-    // Animation parameters
-    rotation_per_frame = 1;
-    unlocked = true;
-    activate_animation = true;
-    animating = false;
 
     std::cout << "Cube Structure Completed" << std::endl;
 }
