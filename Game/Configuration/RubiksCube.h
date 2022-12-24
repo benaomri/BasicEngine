@@ -19,7 +19,7 @@ class RubiksCube {
 public:
     RubiksCube();
     void initCubePositions(Scene *scn);
-    glm::vec4 angleModulo(glm::vec4 currentAngle);
+    glm::vec3 angleModulo(glm::vec3 currentAngle);
     void  MoveUp();
     void MoveR();
     void MoveL();
@@ -29,18 +29,21 @@ public:
     void MoveF();
     void MoveSPACE();
     void MoveZ();
+    void MoveA();
     void MoveUP();
     void MoveDOWN();
     void MoveLEFT();
     void MoveRIGHT();
     void MoveM();
-    void updateStructure(glm::vec3 newPosition);
+    void updateStructure();
+    void Rotate_Cube(int i, int j, int k, glm::vec3 rotation_direction);
 
 
-    // 3D array for storing the positions and indices of the cube faces
-    glm::vec4 cubePositions[NUM_CUBES][NUM_CUBES][NUM_CUBES];
+
+        // 3D array for storing the positions and indices of the cube faces
+    std::vector<std::vector<std::vector<std::pair<int, glm::vec3>>>>  cubePositions;
     // 3D array for storing the angles and indices of the cube faces
-    glm::vec4 cubeAngles[NUM_CUBES][NUM_CUBES][NUM_CUBES];
+    std::vector<std::vector<std::vector<std::pair<int, glm::vec3>>>>  cubeAngles;
 
 
 
@@ -48,6 +51,14 @@ public:
     glm::vec3 currentCenter;
     int clockDirection;
     int rotationAngle;
+
+    int rotation_per_frame;
+
+    bool unlocked;
+    bool activate_animation;
+    bool animating;
+    char action;
+    int num_of_actions;
 
 };
 

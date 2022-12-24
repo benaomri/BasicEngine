@@ -37,15 +37,6 @@ void mouse_callback(GLFWwindow* window,int button, int action, int mods)
 					else
 						scn->Activate();
 				break;
-
-				case GLFW_KEY_UP:
-                    scn->gptCube.MoveUp();
-					break;
-				case GLFW_KEY_DOWN:
-					//scn->shapeTransformation(scn->xGlobalRotate,-5.f);
-					//cout<< "down: "<<endl;
-					scn->MoveCamera(0,scn->zTranslate,-0.4f);
-					break;
                 case GLFW_KEY_R:
                     scn->gptCube.MoveR();
                     break;
@@ -54,6 +45,27 @@ void mouse_callback(GLFWwindow* window,int button, int action, int mods)
                     break;
                 case GLFW_KEY_U:
                     scn->gptCube.MoveU();
+                    break;
+                case GLFW_KEY_D:
+                    scn->gptCube.MoveD();
+                    break;
+                case GLFW_KEY_B:
+                    scn->gptCube.MoveB();
+                    break;
+                case GLFW_KEY_F:
+                    scn->gptCube.MoveF();
+                    break;
+                case GLFW_KEY_UP:
+                    scn->gptCube.MoveUp();
+                    break;
+                case GLFW_KEY_DOWN:
+                    scn->gptCube.MoveDOWN();
+                    break;
+                case GLFW_KEY_RIGHT:
+                    scn->gptCube.MoveRIGHT();
+                    break;
+                case GLFW_KEY_LEFT:
+                    scn->gptCube.MoveLEFT();
                     break;
 			default:
 				break;
