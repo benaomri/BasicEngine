@@ -13,7 +13,6 @@ public:
 	void ZeroTrans();
     glm::mat4 GetTranslate();
     glm::mat4 GetRotate();
-    glm::mat4 GetScale();
 private:
 	glm::mat4 trans;
 	glm::mat4 rot;

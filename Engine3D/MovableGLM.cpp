@@ -61,8 +61,3 @@ glm::mat4 MovableGLM::GetRotate()
 {
     return rot;
 }
-
-glm::mat4 MovableGLM::GetScale()
-{
-    return scl;
-}
