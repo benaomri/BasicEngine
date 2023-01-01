@@ -40,7 +40,7 @@ void RubiksCube::initCubePositions(Scene *scn) {
     }
     scn->MoveCamera(0, Scene::zTranslate, 10);
 
-    currentCenter = glm::vec3(1, 1, 1);
+    currentCenter = glm::vec3(NUM_CUBES/2, NUM_CUBES/2, NUM_CUBES/2);
     clockDirection = 1;
     rotationAngle = 90;
 
