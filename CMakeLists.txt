@@ -24,7 +24,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/res/includes/glfw)
 add_subdirectory(${PROJECT_SOURCE_DIR}/res/includes/glad)
 
 
-add_library(Display ${DISPLAY})
+add_library(Display ${DISPLAY} Game/configuration/BezierCurve.cpp Game/configuration/BezierCurve.h Game/configuration/Route3DBezier1D.cpp Game/configuration/Route3DBezier1D.h)
 add_library(Engine ${ENGINE})
 
 
