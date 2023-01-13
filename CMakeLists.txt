@@ -29,6 +29,10 @@ add_library(Engine ${ENGINE})
 
 
 add_executable(${PROJ_NAME} ${GAME})
-
+if (APPLE)
+    target_link_libraries(${PROJ_NAME} "-framework OpenGL")
+else()
+    target_link_libraries(${PROJ_NAME} Engine Display opengl32.lib glfw glad)
+endif()
 target_link_libraries(${PROJ_NAME} Engine Display glfw glad)
 
