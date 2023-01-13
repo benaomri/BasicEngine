@@ -1,6 +1,6 @@
 #pragma once
 #include "scene.h"
-#include "configuration/Route3DBezier1D.h"
+#include "Route3DBezier1D.h"
 
 class Game : public Scene
 {

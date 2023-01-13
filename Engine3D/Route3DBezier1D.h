@@ -2,8 +2,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "../res/includes/glm/glm.hpp"
-#include "../../Engine3D/scene.h"
+#include "glm/glm.hpp"
+#include "scene.h"
 #include "BezierCurve.h"
 
 using namespace std;

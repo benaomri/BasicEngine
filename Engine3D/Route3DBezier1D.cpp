@@ -19,7 +19,7 @@ void Route3DBezier1D::CreateRoute3DBezier1D(Scene* scn, int segNum, int res, int
     int shape_index = 0;
 
     // Cube + Octahedrons texture
-    scn->AddTexture("../res/textures/box0.bmp", false);
+    scn->AddTexture("../res/textures/plane.png", false);
 
     // Bezier 1D texture
     scn->AddTexture("../res/textures/grass.bmp", false);

@@ -1,7 +1,7 @@
 #pragma once
 
 //#include "Mesh.h"
-#include "../Engine3D/shape.h"
+#include "shape.h"
 
 class BezierCurve : public Shape
 {
