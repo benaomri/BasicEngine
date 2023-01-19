@@ -7,15 +7,6 @@
 
 #define GL_FLOAT 0x1406
 
-//MeshConstructor::MeshConstructor(Bezier1D* c)
-//{
-//	InitLine(c->GetLine());
-//}
-//
-//MeshConstructor::MeshConstructor(Bezier2D* surf)
-//{
-//	InitMesh(surf->GetSurface());
-//}
 
 MeshConstructor::MeshConstructor(const int type)
 {
@@ -141,7 +132,6 @@ void MeshConstructor::CopyLine(const MeshConstructor &mesh){
 void MeshConstructor::ChangeLine(const IndexedModel& model)
 {
     int verticesNum = model.positions.size(); // to change only part of the line
-    //indicesNum = model.indices.size();
 
     vao.Bind();
 
@@ -152,7 +142,6 @@ void MeshConstructor::ChangeLine(const IndexedModel& model)
     }
     indicesNum = model.positions.size();
 
-//	ib = new IndexBuffer((unsigned int*)model.GetData(VEC2_ATTRIB_NUM + VEC3_ATTRIB_NUM), indicesNum);
 
     vao.Unbind();
 
@@ -174,7 +163,6 @@ void MeshConstructor::CopyMesh(const MeshConstructor &mesh){
     }
 
     ib = new IndexBuffer(*mesh.ib);
-    //ib = mesh.ib;
     vao.Unbind();
 
     is2D = true;

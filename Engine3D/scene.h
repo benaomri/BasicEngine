@@ -63,7 +63,7 @@ public:
     inline void SetShapeTex(int shpIndx,int texIndx){shapes[shpIndx]->SetTexture(texIndx);}
     inline void SetShapeShader(int shpIndx,int shdrIndx){shapes[shpIndx]->SetShader(shdrIndx);}
 
-    // New Functions
+    // Added Functions
     void MainParameters(int DISPLAY_WIDTH, int DISPLAY_HEIGHT, float CAMERA_ANGLE, float NEAR, float FAR) {
         width = DISPLAY_WIDTH;
         height = DISPLAY_WIDTH;

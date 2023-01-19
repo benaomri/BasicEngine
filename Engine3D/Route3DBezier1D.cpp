@@ -71,7 +71,7 @@ void Route3DBezier1D::AnimateCubeMovement(bool animate)
             }
         }
 
-        vec4 cube_center = (*scn_shapes)[cube_shape_index]->GetTranslate()[3];
+        vec4 cube_center = (*scn_shapes)[cube_shape_index]->getTranslate()[3];
         vec4 next_position = bezier_1D->GetPointOnCurve(cube_segment, cube_t);
         vec4 move_vector = next_position - cube_center;
         (*scn_shapes)[cube_shape_index]->MyTranslate(vec3(move_vector.x, move_vector.y, move_vector.z), 0);
@@ -83,7 +83,7 @@ void Route3DBezier1D::AnimateCubeMovement(bool animate)
         float delta = sqrt(pow(current_velocity.x, 2) + pow(current_velocity.y, 2) + pow(current_velocity.z, 2));
         vec3 normal_up_down = vec3(0, 0, (current_velocity.x) / delta);
         vec3 normal_left_right = vec3(0, current_velocity.z / delta, 0);
-        (*scn_shapes)[cube_shape_index]->SetRotate(mat4(1));
+        (*scn_shapes)[cube_shape_index]->setRotate(mat4(1));
 
         if (normal_up_down.z != 0) {
             (*scn_shapes)[cube_shape_index]->MyRotate(angle_up_down * (180.f / 3.14f), normal_up_down, 0);
@@ -98,17 +98,17 @@ void Route3DBezier1D::AnimateCubeMovement(bool animate)
 void Route3DBezier1D::UpdateCurveByShapes()
 {
     // Go over all the control points and get their positions from the octahedrons
-    vec4 p0 = (*scn_shapes)[0]->GetTranslate()[3];
-    vec4 p1 = (*scn_shapes)[1]->GetTranslate()[3];
-    vec4 p2 = (*scn_shapes)[2]->GetTranslate()[3];
-    vec4 p3 = (*scn_shapes)[3]->GetTranslate()[3];
+    vec4 p0 = (*scn_shapes)[0]->getTranslate()[3];
+    vec4 p1 = (*scn_shapes)[1]->getTranslate()[3];
+    vec4 p2 = (*scn_shapes)[2]->getTranslate()[3];
+    vec4 p3 = (*scn_shapes)[3]->getTranslate()[3];
     bezier_1D->ChangeFirstSegment(p0, p1, p2, p3);
 
     int segIndx = 1;
     for (int i = 4; i < scn_shapes->size() - 2; i += 3) {
-        vec4 p1 = (*scn_shapes)[i]->GetTranslate()[3];
-        vec4 p2 = (*scn_shapes)[i + 1]->GetTranslate()[3];
-        vec4 p3 = (*scn_shapes)[i + 2]->GetTranslate()[3];
+        vec4 p1 = (*scn_shapes)[i]->getTranslate()[3];
+        vec4 p2 = (*scn_shapes)[i + 1]->getTranslate()[3];
+        vec4 p3 = (*scn_shapes)[i + 2]->getTranslate()[3];
 
         bezier_1D->ChangeSegment(segIndx, p1, p2, p3);
         segIndx++;
@@ -174,10 +174,10 @@ void Route3DBezier1D::NumberOfSegmentsToDisplay(int segNum)
 
     // Reset Cube position
     vec3 cube_new_position = bezier_configs[config_num][0];
-    vec4 cube_old_position = (*scn_shapes)[cube_shape_index]->GetTranslate()[3];
+    vec4 cube_old_position = (*scn_shapes)[cube_shape_index]->getTranslate()[3];
     vec3 movement = cube_new_position - vec3(cube_old_position.x, cube_old_position.y, cube_old_position.z);
     (*scn_shapes)[cube_shape_index]->MyTranslate(movement, 0);
-    (*scn_shapes)[cube_shape_index]->SetRotate(mat4(1));
+    (*scn_shapes)[cube_shape_index]->setRotate(mat4(1));
 
     for (int i = 0; i < number_of_octahedrons; i++) {
         if (i < bezier_configs[config_num].size()) {
@@ -185,7 +185,7 @@ void Route3DBezier1D::NumberOfSegmentsToDisplay(int segNum)
 
             // Reset Octahedrons posotions
             vec3 point_new_position = bezier_configs[config_num][i];
-            vec4 point_old_position = (*scn_shapes)[i]->GetTranslate()[3];
+            vec4 point_old_position = (*scn_shapes)[i]->getTranslate()[3];
             vec3 movement = point_new_position - vec3(point_old_position.x, point_old_position.y, point_old_position.z);
             (*scn_shapes)[i]->MyTranslate(movement, 0);
         }

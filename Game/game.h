@@ -16,7 +16,7 @@ public:
     void Motion();
     ~Game(void);
 
-    // New Functions
+    // Added Functions
     void AddBezier1DShape(Shape* bezier_1D_line, int parent) override;
     void MouseProccessing(int button) override;
     void MouseScrolling(glm::vec3 delta, int mode) override;

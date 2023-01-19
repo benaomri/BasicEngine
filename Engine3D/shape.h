@@ -47,7 +47,7 @@ public:
 
     virtual ~Shape(void);
 
-    // New Functions
+    // Added Functions
     inline void SetMode(int mode) { this->mode = mode; }
 
     inline void SetBezier1DMesh(const IndexedModel bezier_1D_line) { this->mesh = new MeshConstructor(bezier_1D_line, false); }

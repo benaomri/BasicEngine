@@ -3,8 +3,7 @@
 //#include "glm\glm.hpp"
 #include "VertexArray.hpp"
 #include "Mesh.h"
-//#include "build/Curves/Bezier1D.h"
-//#include "build/Curves/Bezier2D.h"
+
 
 
 class MeshConstructor
@@ -25,7 +24,6 @@ class MeshConstructor
     static const unsigned int VEC2_ATTRIB_NUM = 1;
 
 public:
-    //TO DO: add collision detection function which get other MeshConstructor and Mat4 of related transformasions. The function may return a pointer to the relevant Bounding Box when collide
     void ChangeLine(const IndexedModel& model);
     enum SimpleShapes
     {
@@ -35,8 +33,7 @@ public:
         Octahedron,
         Tethrahedron,
     };
-    //MeshConstructor::MeshConstructor(Bezier1D* c);
-    //MeshConstructor::MeshConstructor(Bezier2D* surf);
+
     MeshConstructor(const int type);
     MeshConstructor(const MeshConstructor &mesh);
     MeshConstructor(const std::string& fileName);
