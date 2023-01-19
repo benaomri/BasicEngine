@@ -166,11 +166,11 @@ int Route3DBezier1D::PreviousShape()
 
 void Route3DBezier1D::NumberOfSegmentsToDisplay(int segNum)
 {
-    int res = ((bezier_1D->GetResT() - 1) / bezier_1D->GetSegmentsNum() * segNum) + 1;
+    int res = ((bezier_1D->getResT() - 1) / bezier_1D->GetSegmentsNum() * segNum) + 1;
     int config_num = segNum - 2;
 
-    bezier_1D->SetResT(res);
-    bezier_1D->SetSegmentsNum(segNum);
+    bezier_1D->setResT(res);
+    bezier_1D->setSegmentsNum(segNum);
 
     // Reset Cube position
     vec3 cube_new_position = bezier_configs[config_num][0];
