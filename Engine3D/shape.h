@@ -18,7 +18,7 @@ private:
     bool toRender;
 
 public:
-    // New Default Constructor
+    // Default Constructor
     Shape();
 
     Shape(const Shape& shape,unsigned int mode);
@@ -48,8 +48,8 @@ public:
     virtual ~Shape(void);
 
     // Added Functions
-    inline void SetMode(int mode) { this->mode = mode; }
+    inline void setMode(int mode)  { this->mode = mode; }
 
-    inline void SetBezier1DMesh(const IndexedModel bezier_1D_line) { this->mesh = new MeshConstructor(bezier_1D_line, false); }
+    inline void setBezier1DMesh(const IndexedModel bezier_1D_line) { this->mesh = new MeshConstructor(bezier_1D_line, false); }
 };
 

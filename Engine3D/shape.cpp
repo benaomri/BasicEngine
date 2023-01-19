@@ -2,7 +2,7 @@
 #include "shape.h"
 
 
-// New Default Constructor
+// Default Constructor
 Shape::Shape()
 {
     mesh = NULL;

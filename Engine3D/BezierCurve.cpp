@@ -10,7 +10,7 @@ Bezier1D::Bezier1D(int segNum, int res, int mode, int viewport)
 {
     segmentsNum = segNum;
     resT = res;
-    this->SetMode(mode);
+    this->setMode(mode);
 }
 
 IndexedModel Bezier1D::GetLine() const

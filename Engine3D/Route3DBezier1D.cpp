@@ -31,7 +31,7 @@ void Route3DBezier1D::CreateRoute3DBezier1D(Scene* scn, int segNum, int res, int
     NumberOfSegmentsToDisplay(segNum);
 
     // Building Bezier 1D
-    bezier_1D->SetBezier1DMesh(bezier_1D->GetLine());
+    bezier_1D->setBezier1DMesh(bezier_1D->GetLine());
     scn->AddBezier1DShape(bezier_1D, -1);
     scn->SetShapeTex((*scn_shapes).size() - 1, 1);
 
@@ -113,7 +113,7 @@ void Route3DBezier1D::UpdateCurveByShapes()
         bezier_1D->ChangeSegment(segIndx, p1, p2, p3);
         segIndx++;
     }
-    bezier_1D->SetBezier1DMesh(bezier_1D->GetLine());
+    bezier_1D->setBezier1DMesh(bezier_1D->GetLine());
 }
 
 bool Route3DBezier1D::OnCurvePoint(int index)
@@ -196,7 +196,7 @@ void Route3DBezier1D::NumberOfSegmentsToDisplay(int segNum)
 
     last_point_index = bezier_configs[config_num].size() - 1;
     UpdateCurveByShapes();
-    bezier_1D->SetBezier1DMesh(bezier_1D->GetLine());
+    bezier_1D->setBezier1DMesh(bezier_1D->GetLine());
 }
 
 void Route3DBezier1D::BuildAllShapes(Scene* scn)

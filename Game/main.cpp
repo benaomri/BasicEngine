@@ -18,11 +18,11 @@ int main(int argc,char *argv[])
 
     Init(display);
 
-    // Setting parameters
-    scn->segNum = 3; //number of segments to display (valid values: 2,3,4,5,6)
-    scn->res = 91; //number of point on the curve
-    scn->mode = scn->LINE_STRIP; //curve display mode
-    scn->cube_movement_speed = 0.00005; //control the cube movement speed
+    // Curve Params
+    scn->segNum = 3;
+    scn->res = 91;
+    scn->mode = scn->LINE_STRIP;
+    scn->cube_movement_speed = 0.00005;
 
     scn->Init();
 
