@@ -11,6 +11,7 @@ Bezier1D::Bezier1D(int segNum, int res, int mode, int viewport)
     segmentsNum = segNum;
     resT = res;
     this->setMode(mode);
+
 }
 
 IndexedModel Bezier1D::GetLine() const
@@ -46,6 +47,7 @@ IndexedModel Bezier1D::GetLine() const
             model.normals.push_back(normal);
         }
     }
+
 
     return model;
 }
@@ -96,6 +98,7 @@ glm::vec3 Bezier1D::GetVelosity(int segment, float t) const
 void Bezier1D::AddFirstSegment(glm::vec4 p0, glm::vec4 p1, glm::vec4 p2, glm::vec4 p3) {
     segments.clear();
     segments.push_back(glm::mat4(p0, p1, p2, p3));
+
 }
 
 void Bezier1D::AddSegment(glm::vec4 p1, glm::vec4 p2, glm::vec4 p3)
@@ -108,6 +111,7 @@ void Bezier1D::ChangeFirstSegment(glm::vec4 p0, glm::vec4 p1, glm::vec4 p2, glm:
 {
     segments[0] = glm::mat4(p0, p1, p2, p3);
 }
+
 
 void Bezier1D::ChangeSegment(int segIndx,glm::vec4 p1, glm::vec4 p2, glm::vec4 p3)
 {
@@ -124,14 +128,17 @@ void Bezier1D::SplitSegment(int segment, float t)
 {
 }
 
+
 void Bezier1D::CurveUpdate(int pointIndx, float dx, float dy, bool preserveC1)
 {
 }
 
 void Bezier1D::ResetCurve(int segNum)
 {
+
 }
 
 Bezier1D::~Bezier1D(void)
 {
 }
+

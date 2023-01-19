@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include "../Engine3D/shape.h"
 
 class Bezier1D : public Shape
@@ -37,3 +38,4 @@ public:
     void ResetCurve(int segNum); // to the init state
     ~Bezier1D(void);
 };
+
