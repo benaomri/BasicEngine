@@ -1,4 +1,4 @@
-#include "../Engine3D/BezierCurve.h"
+#include "../Engine3D/Bezier1D.h"
 #include <iostream>
 #include <stdexcept>
 
