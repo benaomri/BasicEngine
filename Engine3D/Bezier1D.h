@@ -1,6 +1,5 @@
 #pragma once
 
-//#include "Mesh.h"
 #include "../Engine3D/shape.h"
 
 class Bezier1D : public Shape
