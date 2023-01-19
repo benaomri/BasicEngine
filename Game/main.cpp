@@ -12,15 +12,17 @@ int main(int argc,char *argv[])
     const float FAR = 150.0f;
 
     Game *scn = new Game(CAMERA_ANGLE,(float)DISPLAY_WIDTH/DISPLAY_HEIGHT,NEAR,FAR);
+    scn->MainParameters(DISPLAY_WIDTH, DISPLAY_HEIGHT, CAMERA_ANGLE, NEAR, FAR);
 
     Display display(DISPLAY_WIDTH, DISPLAY_HEIGHT, "OpenGL");
 
     Init(display);
 
     // Setting parameters
-    scn->segNum = 3;
-    scn->res = 91;
-    scn->mode = 0;
+    scn->segNum = 3; //number of segments to display (valid values: 2,3,4,5,6)
+    scn->res = 91; //number of point on the curve
+    scn->mode = scn->LINE_STRIP; //curve display mode
+    scn->cube_movement_speed = 0.00005; //control the cube movement speed
 
     scn->Init();
 

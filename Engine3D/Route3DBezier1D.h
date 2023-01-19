@@ -2,8 +2,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "glm/glm.hpp"
-#include "scene.h"
+#include "../res/includes/glm/glm.hpp"
+#include "../Engine3D/scene.h"
 #include "BezierCurve.h"
 
 using namespace std;
@@ -30,10 +30,10 @@ public:
     // Variables
     bool C_state = false;
     vector<Shape*>* scn_shapes;
-    BezierCurve *bezier_1D;
+    Bezier1D *bezier_1D;
     int first_point_index, last_point_index;
 
-    // Building 
+    // Building
     int number_of_octahedrons = (6 * 3) + 1; // Max_num_of_segments * 3 + 1
     vector<vector<vec3>> bezier_configs;
 
@@ -42,7 +42,7 @@ public:
     bool forward_direction = true;
     int cube_segment = 0;
     float cube_t = 0;
-    float cube_step_size = 0.0001;
+    float cube_step_size; // Get value from main.cpp
 
     // Picking (With arrows)
     bool S_mode = false;

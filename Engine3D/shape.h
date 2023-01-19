@@ -6,14 +6,6 @@
 
 #include "texture.h"
 
-#pragma once
-#include "MovableGLM.h"
-#include "VertexArray.hpp"
-#include "shader.h"
-#include "MeshConstructor.h"
-
-#include "texture.h"
-
 class Shape : public MovableGLM
 {
 private:
@@ -60,6 +52,4 @@ public:
 
     inline void SetBezier1DMesh(const IndexedModel bezier_1D_line) { this->mesh = new MeshConstructor(bezier_1D_line, false); }
 };
-
-;
 

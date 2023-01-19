@@ -42,6 +42,7 @@ void Game::Init()
     // Creating a 3D route with by manipulating 1D Bezier curve
     route_3D_bezier_1D = Route3DBezier1D();
     route_3D_bezier_1D.CreateRoute3DBezier1D(this, segNum, res, mode);
+    route_3D_bezier_1D.cube_step_size = cube_movement_speed;
 }
 
 void Game::Update(const glm::mat4 &MVP,const glm::mat4 &Model,const int  shaderIndx)
@@ -100,6 +101,26 @@ void Game::MouseScrolling(glm::vec3 delta, int mode)
         shapes[pickedShape]->MyTranslate(glm::vec3(trans.x, trans.y, trans.z), mode);
 
         route_3D_bezier_1D.UpdateCurveByShapes();
+
+        // If the picked shape is the first control point, check if the cube covers it
+        if (pickedShape == route_3D_bezier_1D.first_point_index) {
+            glm::vec4 first_point = shapes[pickedShape]->GetTranslate()[3];
+            glm::vec4 cube = shapes[route_3D_bezier_1D.cube_shape_index]->GetTranslate()[3];
+            glm::vec4 cube_to_point = first_point - cube;
+
+            float cube_distance = sqrt(pow(cube_to_point.x, 2) + pow(cube_to_point.y, 2) + pow(cube_to_point.z, 2));
+
+            if (cube_distance < 2.f) {
+                // Translate the cube into the point position
+                shapes[route_3D_bezier_1D.cube_shape_index]->MyTranslate(glm::vec3(cube_to_point.x, cube_to_point.y, cube_to_point.z), 0);
+
+                // Reset cube position on the 1D Bezier line
+                route_3D_bezier_1D.cube_segment = 0;
+                route_3D_bezier_1D.cube_t = 0;
+
+                shapes[route_3D_bezier_1D.cube_shape_index]->SetRotate(mat4(1));
+            }
+        }
     }
 }
 
@@ -126,41 +147,35 @@ void Game::MouseProccessing(int button)
     }
     else {
         glm::mat4 rot_inverse = glm::inverse(GetRotate());
+        vec2 z_buffer_result = ZBufferTranslation(-GetXrel(), GetYrel());
 
         // Mouse Right Click
         if (button == 1)
         {
-            // If the point is part of the Bezier 1D line
-            if (pickedShape != route_3D_bezier_1D.cube_shape_index) {
-                if (route_3D_bezier_1D.OnCurvePoint(pickedShape)) {
-                    // Multiyply buy camera rotation
-                    glm::vec4 trans_x = rot_inverse * glm::vec4(-GetXrel() / 20.0f, 0, 0, 1);
-                    glm::vec4 trans_y = rot_inverse * glm::vec4(0, GetYrel() / 20.0f, 0, 1);
+            // Check if the point is part of the Bezier 1D line
+            if (pickedShape < route_3D_bezier_1D.cube_shape_index) {
 
-                    //shapes[pickedShape]->MyTranslate(glm::vec3(-GetXrel() / 20.0f, 0, 0), 0);
-                    //shapes[pickedShape]->MyTranslate(glm::vec3(0, GetYrel() / 20.0f, 0), 0);
+                // If the point is on curve enable translation
+                if (route_3D_bezier_1D.OnCurvePoint(pickedShape)) {
+                    // Multiyply by camera rotation
+                    glm::vec4 trans_x = rot_inverse * glm::vec4(z_buffer_result.x, 0, 0, 1);
+                    glm::vec4 trans_y = rot_inverse * glm::vec4(0, z_buffer_result.y, 0, 1);
 
                     shapes[pickedShape]->MyTranslate(glm::vec3(trans_x.x, trans_x.y, trans_x.z), 0);
                     shapes[pickedShape]->MyTranslate(glm::vec3(trans_y.x, trans_y.y, trans_y.z), 0);
 
-                    if (route_3D_bezier_1D.C_state == true) {
-                        if (route_3D_bezier_1D.HasLeft(pickedShape)) {
-                            //shapes[pickedShape - 1]->MyTranslate(glm::vec3(-GetXrel() / 20.0f, 0, 0), 0);
-                            //shapes[pickedShape - 1]->MyTranslate(glm::vec3(0, GetYrel() / 20.0f, 0), 0);
-
-                            shapes[pickedShape - 1]->MyTranslate(glm::vec3(trans_x.x, trans_x.y, trans_x.z), 0);
-                            shapes[pickedShape - 1]->MyTranslate(glm::vec3(trans_y.x, trans_y.y, trans_y.z), 0);
-                        }
-                        if (route_3D_bezier_1D.HasRight(pickedShape)) {
-                            //shapes[pickedShape + 1]->MyTranslate(glm::vec3(-GetXrel() / 20.0f, 0, 0), 0);
-                            //shapes[pickedShape + 1]->MyTranslate(glm::vec3(0, GetYrel() / 20.0f, 0), 0);
-
-                            shapes[pickedShape + 1]->MyTranslate(glm::vec3(trans_x.x, trans_x.y, trans_x.z), 0);
-                            shapes[pickedShape + 1]->MyTranslate(glm::vec3(trans_y.x, trans_y.y, trans_y.z), 0);
-                        }
+                    // Move the two adjacent control points (If they are exists)
+                    if (route_3D_bezier_1D.HasLeft(pickedShape)) {
+                        shapes[pickedShape - 1]->MyTranslate(glm::vec3(trans_x.x, trans_x.y, trans_x.z), 0);
+                        shapes[pickedShape - 1]->MyTranslate(glm::vec3(trans_y.x, trans_y.y, trans_y.z), 0);
+                    }
+                    if (route_3D_bezier_1D.HasRight(pickedShape)) {
+                        shapes[pickedShape + 1]->MyTranslate(glm::vec3(trans_x.x, trans_x.y, trans_x.z), 0);
+                        shapes[pickedShape + 1]->MyTranslate(glm::vec3(trans_y.x, trans_y.y, trans_y.z), 0);
                     }
 
                     // Check if the cube covers the first control point
+                    // If yes, translate the cube as well
                     if (pickedShape == route_3D_bezier_1D.first_point_index) {
                         glm::vec4 first_point = shapes[pickedShape]->GetTranslate()[3];
                         glm::vec4 cube = shapes[route_3D_bezier_1D.cube_shape_index]->GetTranslate()[3];
@@ -174,10 +189,17 @@ void Game::MouseProccessing(int button)
 
                             shapes[route_3D_bezier_1D.cube_shape_index]->MyTranslate(glm::vec3(trans_x.x, trans_x.y, trans_x.z), 0);
                             shapes[route_3D_bezier_1D.cube_shape_index]->MyTranslate(glm::vec3(trans_y.x, trans_y.y, trans_y.z), 0);
+
+                            // Reset cube position on the 1D Bezier line
+                            route_3D_bezier_1D.cube_segment = 0;
+                            route_3D_bezier_1D.cube_t = 0;
+
+                            shapes[route_3D_bezier_1D.cube_shape_index]->SetRotate(mat4(1));
                         }
                     }
                 }
                 else {
+                    // If 'C' was pressed, move the point on the line created with the adjacent point
                     if (route_3D_bezier_1D.C_state == true) {
                         glm::vec4 center, line_with_center;
                         glm::vec4 control_point = shapes[pickedShape]->GetTranslate()[3];
@@ -200,29 +222,25 @@ void Game::MouseProccessing(int button)
                             shapes[pickedShape]->MyTranslate(float(GetYrel() / 20.0f) * movement_direction, 0);
                         }
                     }
+                        // Enable point translation
                     else {
                         // Multiyply by camera rotation
-                        glm::vec4 trans_x = rot_inverse * glm::vec4(-GetXrel() / 20.0f, 0, 0, 1);
-                        glm::vec4 trans_y = rot_inverse * glm::vec4(0, GetYrel() / 20.0f, 0, 1);
-
-                        //shapes[pickedShape]->MyTranslate(glm::vec3(-GetXrel() / 20.0f, 0, 0), 0);
-                        //shapes[pickedShape]->MyTranslate(glm::vec3(0, GetYrel() / 20.0f, 0), 0);
+                        glm::vec4 trans_x = rot_inverse * glm::vec4(z_buffer_result.x, 0, 0, 1);
+                        glm::vec4 trans_y = rot_inverse * glm::vec4(0, z_buffer_result.y, 0, 1);
 
                         shapes[pickedShape]->MyTranslate(glm::vec3(trans_x.x, trans_x.y, trans_x.z), 0);
                         shapes[pickedShape]->MyTranslate(glm::vec3(trans_y.x, trans_y.y, trans_y.z), 0);
                     }
                 }
+
                 route_3D_bezier_1D.UpdateCurveByShapes();
             }
                 // If the cube was selected - Default case
                 // If the Bezier curve was selected - Do nothing
             else if (pickedShape == route_3D_bezier_1D.cube_shape_index) {
                 // Multiyply by camera rotation
-                glm::vec4 trans_x = rot_inverse * glm::vec4(-GetXrel() / 20.0f, 0, 0, 1);
-                glm::vec4 trans_y = rot_inverse * glm::vec4(0, GetYrel() / 20.0f, 0, 1);
-
-                //shapes[pickedShape]->MyTranslate(glm::vec3(-GetXrel() / 20.0f, 0, 0), 0);
-                //shapes[pickedShape]->MyTranslate(glm::vec3(0, GetYrel() / 20.0f, 0), 0);
+                glm::vec4 trans_x = rot_inverse * glm::vec4(z_buffer_result.x, 0, 0, 1);
+                glm::vec4 trans_y = rot_inverse * glm::vec4(0, z_buffer_result.y, 0, 1);
 
                 shapes[pickedShape]->MyTranslate(glm::vec3(trans_x.x, trans_x.y, trans_x.z), 0);
                 shapes[pickedShape]->MyTranslate(glm::vec3(trans_y.x, trans_y.y, trans_y.z), 0);
@@ -230,8 +248,10 @@ void Game::MouseProccessing(int button)
         }
             // Mouse Left Click
         else {
-            // If the point is part of the Bezier 1D line
+            // Check if the point is part of the Bezier 1D line
             if (pickedShape < route_3D_bezier_1D.cube_shape_index) {
+
+                // Traslate the left point to be on the same line with the right point
                 if (route_3D_bezier_1D.OnCurvePoint(pickedShape)) {
                     if (route_3D_bezier_1D.HasLeft(pickedShape) && route_3D_bezier_1D.HasRight(pickedShape)) {
                         glm::vec4 center = shapes[pickedShape]->GetTranslate()[3];
@@ -253,6 +273,7 @@ void Game::MouseProccessing(int button)
                         shapes[pickedShape - 1]->MyTranslate(multiply_factor * glm::vec3(return_from_center.x, return_from_center.y, return_from_center.z), 0);
                     }
                 }
+                    // Rotate the point around the nearby point on curve
                 else {
                     int xrel = GetXrel();
                     int yrel = GetYrel();
@@ -275,9 +296,6 @@ void Game::MouseProccessing(int button)
 
                     glm::vec4 rot = rot_inverse * glm::vec4(0, 0, 1, 0);
 
-                    //shapes[pickedShape]->MyRotate(xrel / 2.0f, glm::vec3(0, 0, 1), 0);
-                    //shapes[pickedShape]->MyRotate(yrel / 2.0f, glm::vec3(0, 0, 1), 0);
-
                     // Rotate the control point in the center of rotation
                     shapes[pickedShape]->MyRotate(xrel / 2.0f, glm::vec3(rot.x, rot.y, rot.z), 0);
                     shapes[pickedShape]->MyRotate(yrel / 2.0f, glm::vec3(rot.x, rot.y, rot.z), 0);
@@ -286,13 +304,11 @@ void Game::MouseProccessing(int button)
                     vec4 return_from_center = shapes[pickedShape]->GetRotate() * -move_to_center;
                     shapes[pickedShape]->MyTranslate(glm::vec3(return_from_center.x, return_from_center.y, return_from_center.z), 0);
 
-                    //shapes[pickedShape]->MyRotate(-xrel / 2.0f, glm::vec3(0, 0, 1), 0);
-                    //shapes[pickedShape]->MyRotate(-yrel / 2.0f, glm::vec3(0, 0, 1), 0);
-
                     // Reset rotation
                     shapes[pickedShape]->MyRotate(-xrel / 2.0f, glm::vec3(rot.x, rot.y, rot.z), 0);
                     shapes[pickedShape]->MyRotate(-yrel / 2.0f, glm::vec3(rot.x, rot.y, rot.z), 0);
 
+                    // If 'C' was pressed, maintain the angle between: this point, the adjacent point on curve and the second point adjacent to the point on curve
                     if (route_3D_bezier_1D.C_state == true) {
                         int second_control_index = pickedShape + c_state_second_control;
 
@@ -301,9 +317,6 @@ void Game::MouseProccessing(int button)
                             move_to_center = center - control_point;
                             shapes[second_control_index]->MyTranslate(glm::vec3(move_to_center.x, move_to_center.y, move_to_center.z), 0);
 
-                            //shapes[second_control_index]->MyRotate(xrel / 2.0f, glm::vec3(0, 0, 1), 0);
-                            //shapes[second_control_index]->MyRotate(yrel / 2.0f, glm::vec3(0, 0, 1), 0);
-
                             // Rotate the control point in the center of rotation
                             shapes[second_control_index]->MyRotate(xrel / 2.0f, glm::vec3(rot.x, rot.y, rot.z), 0);
                             shapes[second_control_index]->MyRotate(yrel / 2.0f, glm::vec3(rot.x, rot.y, rot.z), 0);
@@ -311,9 +324,6 @@ void Game::MouseProccessing(int button)
                             // Move the control point to the new position
                             return_from_center = shapes[second_control_index]->GetRotate() * -move_to_center;
                             shapes[second_control_index]->MyTranslate(glm::vec3(return_from_center.x, return_from_center.y, return_from_center.z), 0);
-
-                            //shapes[second_control_index]->MyRotate(-xrel / 2.0f, glm::vec3(0, 0, 1), 0);
-                            //shapes[second_control_index]->MyRotate(-yrel / 2.0f, glm::vec3(0, 0, 1), 0);
 
                             // Reset rotation
                             shapes[second_control_index]->MyRotate(-xrel / 2.0f, glm::vec3(rot.x, rot.y, rot.z), 0);
@@ -330,12 +340,39 @@ void Game::MouseProccessing(int button)
                 glm::vec4 rot_x = rot_inverse * glm::vec4(0, 1, 0, 0);
                 glm::vec4 rot_y = rot_inverse * glm::vec4(1, 0, 0, 0);
 
-                //shapes[pickedShape]->MyRotate(GetXrel() / 2.0f, glm::vec3(0, 1, 0), 0);
-                //shapes[pickedShape]->MyRotate(GetYrel() / 2.0f, glm::vec3(1, 0, 0), 0);
-
                 shapes[pickedShape]->MyRotate(GetXrel() / 2.0f, glm::vec3(rot_x.x, rot_x.y, rot_x.z), 0);
                 shapes[pickedShape]->MyRotate(GetYrel() / 2.0f, glm::vec3(rot_y.x, rot_y.y, rot_y.z), 0);
             }
         }
     }
+}
+
+glm::vec2 Game::ZBufferTranslation(float dx, float dy) {
+    glm::vec2 z_buffer_result;
+
+    // Get current position on screen
+    float x = GetXPicked();
+    float y = GetYPicked();
+
+    // Calcultae real position
+    z_buffer_result = ZBufferConverter(x, y, 0);
+    float x_new = z_buffer_result.x;
+    float y_new = z_buffer_result.y;
+
+    x += dx;
+    y += dy;
+
+    // Calcultae new real position
+    z_buffer_result = ZBufferConverter(x, y, 0);
+    float x_next = z_buffer_result.x;
+    float y_next = z_buffer_result.y;
+
+    SetXPicked(x);
+    SetYPicked(y);
+
+    // Calcultae translation to new position
+    float x_move = (x_next - x_new) / divide_factor * (float(GetWidth()) / float(GetHeight()));
+    float y_move = (y_next - y_new) / divide_factor;
+
+    return glm::vec2(x_move, y_move);
 }
