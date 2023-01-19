@@ -64,31 +64,28 @@ public:
     inline void SetShapeShader(int shpIndx,int shdrIndx){shapes[shpIndx]->SetShader(shdrIndx);}
 
     // Added Functions
-    void MainParameters(int DISPLAY_WIDTH, int DISPLAY_HEIGHT, float CAMERA_ANGLE, float NEAR, float FAR) {
+    void mainParameters(int DISPLAY_WIDTH, int DISPLAY_HEIGHT, float CAMERA_ANGLE, float NEAR, float FAR) {
         width = DISPLAY_WIDTH;
         height = DISPLAY_WIDTH;
-        camera_angle = CAMERA_ANGLE;
-        camera_near = NEAR;
-        camera_far = FAR;
+        cameraAngle = CAMERA_ANGLE;
+        cameraNear = NEAR;
+        cameraFar = FAR;
     }
-    virtual std::vector<Shape*>* GetShapes() = 0;
-    virtual void AddBezier1DShape(Shape* bezier_1D_line, int parent) = 0;
-    virtual void MouseScrolling(glm::vec3 delta, int mode) = 0;
+    virtual std::vector<Shape*>* getShapes() = 0;
+    virtual void addBezier1DShape(Shape* bezier_1D_line, int parent) = 0;
+    virtual void mouseScrolling(glm::vec3 delta, int mode) = 0;
 
-    glm::vec2 ZBufferConverter(float x, float y, int mode);
+    glm::vec2 zBufferConverter(float x, float y, int mode);
 
-    // Getters
-    inline int GetXrel() { return xrel; }
-    inline int GetYrel() { return yrel; }
-    inline float GetXPicked() { return x_picked; }
-    inline float GetYPicked() { return y_picked; }
-    inline int GetWidth() { return width; }
-    inline int GetHeight() { return height; }
-
-    // Setters
-    void SetXPicked(float x_picked) { this->x_picked = x_picked; }
-    void SetYPicked(float y_picked) { this->y_picked = y_picked; }
-    void SetPickedShape(int pickedShape) { this->pickedShape = pickedShape; }
+    inline int getXrel() { return xrel; }
+    inline int getYrel() { return yrel; }
+    inline float getXPicked() { return xPicked; }
+    inline float getYPicked() { return yPicked; }
+    inline int getWidth() { return width; }
+    inline int getHeight() { return height; }
+    void setXPicked(float x_picked) { this->xPicked = x_picked; }
+    void setYPicked(float y_picked) { this->yPicked = y_picked; }
+    void setPickedShape(int pickedShape) { this->pickedShape = pickedShape; }
 
 private:
 
@@ -99,10 +96,9 @@ private:
     int cameraIndx;
     void Clear(float r, float g, float b, float a);
 
-    // New Variables
     int width, height;
-    float camera_angle, camera_near, camera_far;
-    float picked_depth, x_picked, y_picked;
+    float cameraAngle, cameraNear, cameraFar;
+    float pickedDepth, xPicked, yPicked;
 
 protected:
     std::vector<Shape*> shapes;

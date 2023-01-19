@@ -17,7 +17,7 @@ Bezier1D::Bezier1D(int segNum, int res, int mode, int viewport)
 IndexedModel Bezier1D::GetLine() const
 {
     IndexedModel model;
-    int num_of_dots_on_line = (resT - 1) / segmentsNum;
+    int numOfDotsOnLine = (resT - 1) / segmentsNum;
 
     // Verifying that resT value is valid
     if ((resT - 1) % segmentsNum != 0) {
@@ -33,16 +33,16 @@ IndexedModel Bezier1D::GetLine() const
     model.positions.push_back(glm::vec3(p_0.x, p_0.y, p_0.z));
 
     for (int i = 0; i < segmentsNum; i++) {
-        for (int j = 0; j < num_of_dots_on_line; j++) {
-            float t = (1.f / (float)num_of_dots_on_line) * (j + 1);
-            glm::vec4 p_t = GetPointOnCurve(i, t);
+        for (int j = 0; j < numOfDotsOnLine; j++) {
+            float t = (1.f / (float)numOfDotsOnLine) * (j + 1);
+            glm::vec4 pointOnCurve = GetPointOnCurve(i, t);
 
             // Normal to the Curve (2D)
             glm::vec3 dt = GetVelosity(i, t);
             float sqrt_t = sqrt(pow(dt.x, 2) + pow(dt.y, 2));
             glm::vec3 normal = glm::vec3(-dt.y / sqrt_t, dt.x / sqrt_t, 0);
 
-            model.positions.push_back(glm::vec3(p_t.x, p_t.y, p_t.z));
+            model.positions.push_back(glm::vec3(pointOnCurve.x, pointOnCurve.y, pointOnCurve.z));
             model.colors.push_back(glm::vec3(1.f, 1.f, 1.f));
             model.normals.push_back(normal);
         }
@@ -59,40 +59,38 @@ glm::vec4 Bezier1D::GetControlPoint(int segment, int indx) const
     return segments[segmentsNum - 1][3];
 }
 
-// b(t) = (1-t)^3*b_0 + 3t(1-t)^2*b_1 + 3t^2(1-t)*b_2 + t^3*b_3
 glm::vec4 Bezier1D::GetPointOnCurve(int segment, float t) const
 {
-    glm::vec4 b_0 = segments[segment][0]; //p0
-    glm::vec4 b_1 = segments[segment][1]; //p1
-    glm::vec4 b_2 = segments[segment][2]; //p2
-    glm::vec4 b_3 = segments[segment][3]; //p3
+    glm::vec4 b0 = segments[segment][0]; //p0
+    glm::vec4 b1 = segments[segment][1]; //p1
+    glm::vec4 b2 = segments[segment][2]; //p2
+    glm::vec4 b3 = segments[segment][3]; //p3
 
-    float a_0 = pow(1 - t, 3);
-    float a_1 = 3 * pow(1 - t, 2) * t;
-    float a_2 = 3 * (1 - t) * pow(t, 2);
-    float a_3 = pow(t, 3);
+    float a0 = pow(1 - t, 3);
+    float a1 = 3 * pow(1 - t, 2) * t;
+    float a2 = 3 * (1 - t) * pow(t, 2);
+    float a3 = pow(t, 3);
 
-    glm::vec4 b_t = a_0 * b_0 + a_1 * b_1 + a_2 * b_2 + a_3 * b_3;
+    glm::vec4 bT = a0 * b0 + a1 * b1 + a2 * b2 + a3 * b3;
 
-    return b_t;
+    return bT;
 }
 
-// b'(t) = -3(1-t)^2*b_0 + (3-12t+9t^2)*b_1 + (6t-9t^2)*b_2 + 3t^2*b_3
 glm::vec3 Bezier1D::GetVelosity(int segment, float t) const
 {
-    glm::vec4 b_0 = segments[segment][0]; //p0
-    glm::vec4 b_1 = segments[segment][1]; //p1
-    glm::vec4 b_2 = segments[segment][2]; //p2
-    glm::vec4 b_3 = segments[segment][3]; //p3
+    glm::vec4 b0 = segments[segment][0]; //p0
+    glm::vec4 b1 = segments[segment][1]; //p1
+    glm::vec4 b2 = segments[segment][2]; //p2
+    glm::vec4 b3 = segments[segment][3]; //p3
 
-    float a_0 = -3 * pow(1 - t, 2);
-    float a_1 = 3 - 12 * t + 9 * pow(t, 2);
-    float a_2 = 6 * t - 9 * pow(t, 2);
-    float a_3 = 3 * pow(t, 2);
+    float a0 = -3 * pow(1 - t, 2);
+    float a1 = 3 - 12 * t + 9 * pow(t, 2);
+    float a2 = 6 * t - 9 * pow(t, 2);
+    float a3 = 3 * pow(t, 2);
 
-    glm::vec4 db_t = a_0 * b_0 + a_1 * b_1 + a_2 * b_2 + a_3 * b_3;
+    glm::vec4 dbT = a0 * b0 + a1 * b1 + a2 * b2 + a3 * b3;
 
-    return glm::vec3(db_t.x, db_t.y, db_t.z);
+    return glm::vec3(dbT.x, dbT.y, dbT.z);
 }
 
 void Bezier1D::AddFirstSegment(glm::vec4 p0, glm::vec4 p1, glm::vec4 p2, glm::vec4 p3) {

@@ -1,6 +1,6 @@
 #pragma once
 #include "scene.h"
-#include "../Engine3D/Route3DBezier1D.h"
+#include "../Engine3D/RouteBezier.h"
 
 class Game : public Scene
 {
@@ -17,12 +17,12 @@ public:
     ~Game(void);
 
     // Added Functions
-    void AddBezier1DShape(Shape* bezier_1D_line, int parent) override;
+    void addBezier1DShape(Shape* bezier_1D_line, int parent) override;
     void MouseProccessing(int button) override;
-    void MouseScrolling(glm::vec3 delta, int mode) override;
+    void mouseScrolling(glm::vec3 delta, int mode) override;
 
     // Getters
-    std::vector<Shape*>* GetShapes() override { return &shapes; }
+    std::vector<Shape*>* getShapes() override { return &shapes; }
 
     // Bonus
     vec2 ZBufferTranslation(float dx, float dy);
@@ -30,7 +30,7 @@ public:
     // New Variables
     int segNum, res, mode, viewport;
     float cube_movement_speed;
-    Route3DBezier1D route_3D_bezier_1D;
+    RouteBezier route_3D_bezier_1D;
 
     // Bonus
     float divide_factor = 2.4f;

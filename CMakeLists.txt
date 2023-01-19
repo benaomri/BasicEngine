@@ -28,7 +28,7 @@ add_library(Display ${DISPLAY})
 add_library(Engine ${ENGINE})
 
 
-add_executable(${PROJ_NAME} ${GAME} Engine3D/Route3DBezier1D.h Engine3D/Route3DBezier1D.cpp)
+add_executable(${PROJ_NAME} ${GAME} Engine3D/RouteBezier.h Engine3D/RouteBezier.cpp)
 
 target_link_libraries(${PROJ_NAME} Engine Display glfw glad)
 

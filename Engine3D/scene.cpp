@@ -170,9 +170,9 @@ float Scene::Picking(int x, int y) {
     int id = data[0] | data[1] << 8 | data[2] << 16;
     pickedShape = id - 1;
 
-    picked_depth = depth;
-    x_picked = x;
-    y_picked = y;
+    pickedDepth = depth;
+    xPicked = x;
+    yPicked = y;
 
     return 0;
 }
@@ -246,17 +246,17 @@ Scene::~Scene(void) {
 }
 
 // Added Functions
-glm::vec2 Scene::ZBufferConverter(float x, float y, int mode) {
-    float z = camera_far + picked_depth * (camera_near - camera_far);
-    float alpha = camera_angle * (3.14f / 180.f);
+glm::vec2 Scene::zBufferConverter(float x, float y, int mode) {
+    float z = cameraFar + pickedDepth * (cameraNear - cameraFar);
+    float alpha = cameraAngle * (3.14f / 180.f);
     float x_res, y_res;
 
     if (mode == 0) {
-        x_res = ((x * camera_far) / (width * z)) * camera_near * 2 * tan(alpha);
-        y_res = ((y * camera_far) / (height * z)) * camera_near * 2 * tan(alpha);
+        x_res = ((x * cameraFar) / (width * z)) * cameraNear * 2 * tan(alpha);
+        y_res = ((y * cameraFar) / (height * z)) * cameraNear * 2 * tan(alpha);
     } else {
-        x_res = (camera_far / (width * z)) * camera_near * 2 * tan(alpha);
-        y_res = (camera_far / (height * z)) * camera_near * 2 * tan(alpha);
+        x_res = (cameraFar / (width * z)) * cameraNear * 2 * tan(alpha);
+        y_res = (cameraFar / (height * z)) * cameraNear * 2 * tan(alpha);
         x_res = x / x_res;
         y_res = y / y_res;
     }
