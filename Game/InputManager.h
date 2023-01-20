@@ -17,8 +17,7 @@ void mouse_callback(GLFWwindow* window,int button, int action, int mods)
 	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	{
 		Game *scn = (Game*)glfwGetWindowUserPointer(window);
-		scn->MyTranslate(glm::vec3(0,0,xoffset),0);
-		
+        scn->MyTranslate(glm::vec3(0, 0, yoffset), 0);
 	}
 	
 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -30,24 +29,46 @@ void mouse_callback(GLFWwindow* window,int button, int action, int mods)
 			{
 				case GLFW_KEY_ESCAPE:			
 					glfwSetWindowShouldClose(window,GLFW_TRUE);
-				break;
+				    break;
 				case GLFW_KEY_SPACE:
-					if(scn->IsActive())
-						scn->Deactivate();
-					else
-						scn->Activate();
-				break;
-
-				case GLFW_KEY_UP:
-                    scn->gptCube.MoveUp();
-					break;
-				case GLFW_KEY_DOWN:
-					//scn->shapeTransformation(scn->xGlobalRotate,-5.f);
-					//cout<< "down: "<<endl;
-					scn->MoveCamera(0,scn->zTranslate,-0.4f);
-					break;
+					scn->rubiksCube.MoveSPACE();
+                    break;
                 case GLFW_KEY_R:
-                    scn->gptCube.MoveR();
+                    scn->rubiksCube.MoveR();
+                    break;
+                case GLFW_KEY_L:
+                    scn->rubiksCube.MoveL();
+                    break;
+                case GLFW_KEY_U:
+                    scn->rubiksCube.MoveU();
+                    break;
+                case GLFW_KEY_D:
+                    scn->rubiksCube.MoveD();
+                    break;
+                case GLFW_KEY_B:
+                    scn->rubiksCube.MoveB();
+                    break;
+                case GLFW_KEY_F:
+                    scn->rubiksCube.MoveF();
+                    break;
+                case GLFW_KEY_UP:
+                    scn->rubiksCube.MoveUP();
+                    break;
+                case GLFW_KEY_DOWN:
+                    scn->rubiksCube.MoveDOWN();
+                    break;
+                case GLFW_KEY_RIGHT:
+                    scn->rubiksCube.MoveRIGHT();
+                    break;
+                case GLFW_KEY_LEFT:
+                    scn->rubiksCube.MoveLEFT();
+                    break;
+                case GLFW_KEY_Z:
+                    scn->rubiksCube.MoveZ();
+                    break;
+                case GLFW_KEY_A:
+                    scn->rubiksCube.MoveA();
+                    break;
 			default:
 				break;
 			}

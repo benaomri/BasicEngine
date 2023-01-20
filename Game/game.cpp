@@ -23,19 +23,11 @@ void Game::Init() {
     AddShader("../res/shaders/pickingShader");
     AddShader("../res/shaders/basicShader");
 
-//	AddTexture("../res/textures/plane.png",false);
-
-//	AddShape(Plane,-1,TRIANGLES);
-//	AddShape(Cube,-1,TRIANGLES);
     pickedShape = 0;
-
-//	SetShapeTex(0,0);
-//	MoveCamera(0,zTranslate,10);
     pickedShape = -1;
-//    rubikCube = RubikCube();
-//    rubikCube.Create_Cube(this, cubeSize);
-    gptCube = RubiksCube();
-    gptCube.initCubePositions(this);
+
+    rubiksCube = RubiksCube();
+    rubiksCube.initCubePositions(this);
     //ReadPixel(); //uncomment when you are reading from the z-buffer
 }
 

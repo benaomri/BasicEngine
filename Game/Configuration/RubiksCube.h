@@ -1,24 +1,17 @@
-
-
 #ifndef GAME_RUBIKSCUBE_H
 #define GAME_RUBIKSCUBE_H
 
 #include "glm/vec4.hpp"
 #include "scene.h"
 #include <iostream>
-
-#define CUBE_SIZE 1.0
+#include <glm/gtc/matrix_transform.hpp>
 #define NUM_CUBES 3
-#define DELTA  (NUM_CUBES-1)/2
-#define  ROTATION_SPEED = 10.0f
-
 
 class RubiksCube {
 public:
     RubiksCube();
     void initCubePositions(Scene *scn);
-    glm::vec4 angleModulo(glm::vec4 currentAngle);
-    void  MoveUp();
+    glm::vec3 angleModulo(glm::vec3 currentAngle);
     void MoveR();
     void MoveL();
     void MoveU();
@@ -27,20 +20,18 @@ public:
     void MoveF();
     void MoveSPACE();
     void MoveZ();
+    void MoveA();
     void MoveUP();
     void MoveDOWN();
     void MoveLEFT();
     void MoveRIGHT();
-    void MoveM();
+    void updateStructure();
+    void rotateCube(int x, int y, int z, glm::vec3 rotationDirection);
 
-    // 3D array for storing the positions and indices of the cube faces
-    glm::vec4 cubePositions[NUM_CUBES][NUM_CUBES][NUM_CUBES];
-    // 3D array for storing the angles and indices of the cube faces
-    glm::vec4 cubeAngles[NUM_CUBES][NUM_CUBES][NUM_CUBES];
+    std::vector<std::vector<std::vector<std::pair<int, glm::vec3>>>>  cubePositions;
+    std::vector<std::vector<std::vector<std::pair<int, glm::vec3>>>>  cubeAngles;
 
-
-
-    std::vector<Shape *> *scnShapes;
+    std::vector<Shape *> *shapes;
     glm::vec3 currentCenter;
     int clockDirection;
     int rotationAngle;
@@ -48,4 +39,4 @@ public:
 };
 
 
-#endif //GAME_RUBIKSCUBE_H
+#endif
