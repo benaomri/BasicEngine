@@ -5,30 +5,37 @@
 
 int main(int argc,char *argv[])
 {
-	const int DISPLAY_WIDTH = 800;
-	const int DISPLAY_HEIGHT = 800;
-	const float CAMERA_ANGLE = 0.0f;
-	const float NEAR = 1.0f;
-	const float FAR = 100.0f;
+    const int DISPLAY_WIDTH = 800;
+    const int DISPLAY_HEIGHT = 800;
+    const float CAMERA_ANGLE = 45.0f;
+    const float NEAR = 1.0f;
+    const float FAR = 150.0f;
 
-	Game *scn = new Game(CAMERA_ANGLE,(float)DISPLAY_WIDTH/DISPLAY_HEIGHT,NEAR,FAR);
-	
-	Display display(DISPLAY_WIDTH, DISPLAY_HEIGHT, "OpenGL");
-	
-	Init(display);
-	
-	scn->Init();
+    Game *scn = new Game(CAMERA_ANGLE,(float)DISPLAY_WIDTH/DISPLAY_HEIGHT,NEAR,FAR);
+    scn->mainParameters(DISPLAY_WIDTH, DISPLAY_HEIGHT, CAMERA_ANGLE, NEAR, FAR);
 
-	display.SetScene(scn);
+    Display display(DISPLAY_WIDTH, DISPLAY_HEIGHT, "OpenGL");
 
-	while(!display.CloseWindow())
-	{
-		scn->Draw(1,0,scn->BACK,true,false);
-		scn->Motion();
-		display.SwapBuffers();
-		display.PollEvents();	
-			
-	}
-	delete scn;
-	return 0;
+    Init(display);
+
+    // Curve Params
+    scn->segNum = 3;
+    scn->res = 91;
+    scn->mode = scn->LINE_STRIP;
+    scn->cube_movement_speed = 0.00005;
+
+    scn->Init();
+
+    display.SetScene(scn);
+
+    while(!display.CloseWindow())
+    {
+        scn->Draw(1,0,scn->BACK,true,false);
+        scn->Motion();
+        display.SwapBuffers();
+        display.PollEvents();
+
+    }
+    delete scn;
+    return 0;
 }

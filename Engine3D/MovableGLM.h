@@ -1,18 +1,27 @@
 #pragma once
 #include "../res/includes/glm/glm.hpp"
 
-class MovableGLM 
+class MovableGLM
 {
 public:
-	MovableGLM();
-	glm::mat4 MakeTrans(const glm::mat4 &prevTransformations) const;
-	glm::mat4 MakeTrans() const;
-	void MyTranslate(glm::vec3 delta, int mode);
-	void MyRotate(float angle, const glm::vec3 &vec, int mode);
-	void MyScale(glm::vec3 scale);
-	void ZeroTrans();
+    MovableGLM();
+    glm::mat4 MakeTrans(const glm::mat4 &prevTransformations) const;
+    glm::mat4 MakeTrans() const;
+    void MyTranslate(glm::vec3 delta, int mode);
+    void MyRotate(float angle, const glm::vec3 &vec, int mode);
+    void MyScale(glm::vec3 scale);
+    void ZeroTrans();
+
+    // Added Functions
+    glm::mat4 getTranslate() { return trans; }
+    glm::mat4 getRotate() { return rot; }
+    glm::mat4 getScale() { return scl; }
+
+    void setTranslate(glm::mat4 trans) { this->trans = trans; }
+    void setRotate(glm::mat4 rot) { this->rot = rot; }
+    void setScale(glm::mat4 scl) { this->scl = scl; }
 private:
-	glm::mat4 trans;
-	glm::mat4 rot;
-	glm::mat4 scl;
+    glm::mat4 trans;
+    glm::mat4 rot;
+    glm::mat4 scl;
 };

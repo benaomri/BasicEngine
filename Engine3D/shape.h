@@ -10,39 +10,46 @@ class Shape : public MovableGLM
 {
 private:
 
-	MeshConstructor *mesh;
-	int texID;
-	int shaderID;
-	bool isCopy;
-	unsigned int mode;
-	bool toRender;
+    MeshConstructor *mesh;
+    int texID;
+    int shaderID;
+    bool isCopy;
+    unsigned int mode;
+    bool toRender;
 
 public:
+    // Default Constructor
+    Shape();
 
-	Shape(const Shape& shape,unsigned int mode);
+    Shape(const Shape& shape,unsigned int mode);
 
-	Shape(const std::string& fileName,unsigned int mode);
-	
-	Shape(const int SimpleShapeType,unsigned int mode);
+    Shape(const std::string& fileName,unsigned int mode);
 
-	void Draw( const std::vector<Shader*> shaders, const std::vector<Texture*> textures,bool isPicking);
+    Shape(const int SimpleShapeType,unsigned int mode);
 
-	inline void Hide() {toRender = false;}
+    void Draw( const std::vector<Shader*> shaders, const std::vector<Texture*> textures,bool isPicking);
 
-	inline void Unhide() {toRender = true;}
+    inline void Hide() {toRender = false;}
 
-	inline bool Is2Render() {return toRender;}
+    inline void Unhide() {toRender = true;}
 
-	inline bool Is2D(){return mesh->Is2D();}
+    inline bool Is2Render() {return toRender;}
 
-	inline void SetTexture(int id){ texID = id;}
+    inline bool Is2D(){return mesh->Is2D();}
 
-	inline void SetShader(int id){ shaderID = id;}
+    inline void SetTexture(int id){ texID = id;}
 
-	inline int GetShader(){return shaderID;}
+    inline void SetShader(int id){ shaderID = id;}
 
-	inline int GetTexture(){return texID;}
+    inline int GetShader(){return shaderID;}
 
-	virtual ~Shape(void);
+    inline int GetTexture(){return texID;}
+
+    virtual ~Shape(void);
+
+    // Added Functions
+    inline void setMode(int mode)  { this->mode = mode; }
+
+    inline void setBezier1DMesh(const IndexedModel bezier_1D_line) { this->mesh = new MeshConstructor(bezier_1D_line, false); }
 };
 
